@@ -22,21 +22,21 @@ function DesktopNavigation() {
                 </li>
                 <li className="px-3">
                     <Link
-                        href="/"
+                        href="/sobre-mi"
                     >
                         Sobre mí
                     </Link>
                 </li>
                 <li className="px-3">
                     <Link
-                        href="/"
+                        href="/obras"
                     >
-                        Proyectos
+                        Obras
                     </Link>
                 </li>
                 <li className="px-3">
                     <Link
-                        href="/"
+                        href="/contacto"
                     >
                         Contacto
                     </Link>

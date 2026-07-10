@@ -1,7 +1,9 @@
+import { Heading } from "@/shared/components/typography/heading";
+
 export default function ObrasPage() {
     return (
-        <>
-            obras
-        </>
+        <div>
+            <Heading>Obras</Heading>
+        </div>
     )
 }

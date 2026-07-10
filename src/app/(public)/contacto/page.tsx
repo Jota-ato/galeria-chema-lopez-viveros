@@ -1,7 +1,9 @@
-export default function ContacPage() {
+import { Heading } from "@/shared/components/typography/heading";
+
+export default function ContactPage() {
     return (
-        <>
-            Contacto
-        </>
+        <div>
+            <Heading>Contacto</Heading>
+        </div>
     )
 }
