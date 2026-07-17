@@ -4,8 +4,7 @@ import { collections } from "./collections";
 export const artworks = pgTable("artwork", {
   id: text("id").primaryKey(),
   collectionId: text("collection_id")
-    .notNull()
-    .references(() => collections.id, { onDelete: "cascade" }),
+    .references(() => collections.id, { onDelete: "set null" }),
   title: text("title").notNull(),
   description: text("description"),
   imageUrl: text("image_url"),

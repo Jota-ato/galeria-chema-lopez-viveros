@@ -1,0 +1,2 @@
+ALTER TABLE "artwork" ALTER COLUMN "collection_id" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "artwork" DROP CONSTRAINT "artwork_collection_id_collection_id_fkey", ADD CONSTRAINT "artwork_collection_id_collection_id_fkey" FOREIGN KEY ("collection_id") REFERENCES "collection"("id") ON DELETE SET NULL;
