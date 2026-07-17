@@ -1,55 +1,53 @@
-import Link from "next/link"
+import { Route } from "next";
+import Link from "next/link";
+
+const navigationLinks: {
+  href: Route;
+  label: string;
+}[] = [
+  {
+    href: "/",
+    label: "Inicio",
+  },
+  {
+    href: "/sobre-mi",
+    label: "Sobre mí",
+  },
+  {
+    href: "/obras",
+    label: "Obras",
+  },
+  {
+    href: "/contacto",
+    label: "Contacto",
+  },
+];
 
 export function Navigation() {
-    return (
-        <>
-            <DesktopNavigation />
-            <MobileNavigation />
-        </>
-    )
+  return (
+    <>
+      <DesktopNavigation />
+      <MobileNavigation />
+    </>
+  );
 }
 
 function DesktopNavigation() {
-    return (
-        <nav className="hidden md:block">
-            <ul className="flex justify-between items-center">
-                <li className="px-3">
-                    <Link
-                        href="/"
-                    >
-                        Inicio
-                    </Link>
-                </li>
-                <li className="px-3">
-                    <Link
-                        href="/sobre-mi"
-                    >
-                        Sobre mí
-                    </Link>
-                </li>
-                <li className="px-3">
-                    <Link
-                        href="/obras"
-                    >
-                        Obras
-                    </Link>
-                </li>
-                <li className="px-3">
-                    <Link
-                        href="/contacto"
-                    >
-                        Contacto
-                    </Link>
-                </li>
-            </ul>
-        </nav>
-    )
+  return (
+    <nav className="hidden md:block">
+      <ul className="flex justify-between items-center">
+        {navigationLinks.map((link) => (
+          <li key={link.href} className="px-3">
+            <Link href={link.href}>
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
 }
 
 function MobileNavigation() {
-    return (
-        <nav className="md:hidden">
-
-        </nav>
-    )
+  return <nav className="md:hidden"></nav>;
 }
