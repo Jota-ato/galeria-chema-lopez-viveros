@@ -4,8 +4,8 @@ import { Container } from "../layout/container";
 
 export function Header() {
   return (
-    <div className="fixed top-0 w-full bg-transparent py-4">
-      <Container className="flex items-center justify-between ">
+    <div className="w-full fixed top-0 left-0 z-50 bg-linear-to-b from-black/40 to-black/5 h-16 flex items-center">
+      <Container className="flex items-center justify-between text-slate-50">
         <Link href="/">Chema López Viveros</Link>
         <Navigation />
       </Container>

@@ -37,7 +37,7 @@ function DesktopNavigation() {
     <nav className="hidden md:block">
       <ul className="flex justify-between items-center">
         {navigationLinks.map((link) => (
-          <li key={link.href} className="px-3">
+          <li key={link.href} className="px-4 hover:bg-secondary transition-colors duration-300">
             <Link href={link.href}>
               {link.label}
             </Link>
