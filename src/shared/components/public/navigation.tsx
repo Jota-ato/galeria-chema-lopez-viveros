@@ -66,6 +66,7 @@ function MobileNavigation() {
           render={<DropdownMenuTrigger />}
           variant="ghost"
           className="flex items-center justify-center"
+          aria-label="Navegación"
         >
           <div className="size-7 flex justify-center flex-col gap-1">
             <div className="w-full h-px bg-slate-50" />
