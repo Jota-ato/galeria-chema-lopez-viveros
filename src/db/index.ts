@@ -1,9 +1,5 @@
-import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/neon-http';
-import * as schema from './schema';
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/neon-http";
+import { relations } from "./schema/relations";
 
-export const db = drizzle(
-    process.env.DATABASE_URL!, {
-    schema
-}
-)
+export const db = drizzle(process.env.DATABASE_URL!, { relations });
