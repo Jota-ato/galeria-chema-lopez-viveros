@@ -46,7 +46,9 @@ export function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <LogOutButton />
+        <LogOutButton 
+          justIcon={!open}
+        />
       </SidebarFooter>
     </Sidebar>
   );

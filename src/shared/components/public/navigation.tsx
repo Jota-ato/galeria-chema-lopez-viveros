@@ -48,7 +48,7 @@ function DesktopNavigation() {
         {navigationLinks.map((link) => (
           <li
             key={link.href}
-            className="px-4 hover:bg-secondary transition-colors duration-300"
+            className="px-4 hover:bg-secondary transition-colors duration-300 rounded-md"
           >
             <Link href={link.href}>{link.label}</Link>
           </li>
