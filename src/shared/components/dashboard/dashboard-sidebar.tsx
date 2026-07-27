@@ -13,11 +13,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../ui/sidebar";
-import { Home, LogOut, Sidebar as SidebarIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import { signOut } from "@/lib/auth-client";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
+import { Home, Sidebar as SidebarIcon } from "lucide-react";
 import { LogOutButton } from "../ui/log-out-button";
 
 export function DashboardSidebar() {
@@ -46,9 +42,7 @@ export function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <LogOutButton 
-          justIcon={!open}
-        />
+        <LogOutButton justIcon={!open} />
       </SidebarFooter>
     </Sidebar>
   );
