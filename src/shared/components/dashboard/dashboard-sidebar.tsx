@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../ui/sidebar";
-import { Home, Sidebar as SidebarIcon } from "lucide-react";
+import { Home, Sidebar as SidebarIcon, Brush, Group } from "lucide-react";
 import { LogOutButton } from "../ui/log-out-button";
 
 export function DashboardSidebar() {
@@ -36,6 +36,12 @@ export function DashboardSidebar() {
               </SidebarMenuButton>
               <SidebarMenuButton render={<Link href="/dashboard" />}>
                 <Home /> Inicio
+              </SidebarMenuButton>
+              <SidebarMenuButton render={<Link href="/dashboard/obras" />}>
+                <Brush /> Obras
+              </SidebarMenuButton>
+              <SidebarMenuButton render={<Link href="/dashboard/colecciones" />}>
+                <Group /> Colecciones
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
