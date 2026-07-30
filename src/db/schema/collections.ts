@@ -3,6 +3,7 @@ import { pgTable, text, timestamp, varchar, uuid } from "drizzle-orm/pg-core";
 export const collections = pgTable("collection", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
   description: text("description").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
