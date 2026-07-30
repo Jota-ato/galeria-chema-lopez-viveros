@@ -4,7 +4,11 @@ class ArworksService {
   constructor(private artworksRepository: IArtworksRepository) {}
   
   async getLastArtworks(limit: number, page: number) {
-    return await this.artworksRepository.getLast(limit, page);
+    return await this.artworksRepository.getLatest(limit, page);
+  }
+
+  async getArtworkBySlug(slug: string) {
+    return await this.artworksRepository.getBySlug(slug);
   }
 }
 
