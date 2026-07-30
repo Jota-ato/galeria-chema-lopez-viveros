@@ -11,7 +11,7 @@ export default async function ObrasPage() {
         <div>
             <Heading>Obras</Heading>
 
-            <section className="bg-secondary min-h-screen my-8 md:my-12 p-8 flex items-center justify-center">
+            <section className="bg-secondary min-h-screen my-8 md:my-12 py-8 flex items-center justify-center">
                 <Container>
                     <ArtworkBentoAlbum artworks={artworks} />
                 </Container>
