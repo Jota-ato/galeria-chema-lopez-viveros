@@ -1,4 +1,5 @@
 import { artworksService } from "@/features/artworks/services/artworks-service";
+import { Container } from "@/shared/components/layout/container";
 import { Heading } from "@/shared/components/typography/heading";
 import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
@@ -72,7 +73,7 @@ export default async function ArtworkPage({
   const ratio = RATIO_MAP[artwork.aspectRatio];
 
   return (
-    <div className="space-y-4">
+    <Container className="space-y-4">
       <Heading>{artwork.title}</Heading>
 
       <section className="flex flex-col md:flex-row gap-6 md:gap-8">
@@ -107,6 +108,6 @@ export default async function ArtworkPage({
           </Button>
         </div>
       </section>
-    </div>
+    </Container>
   );
 }

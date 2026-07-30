@@ -7,8 +7,8 @@ export default function MarketingLayout({
     children: ReactNode
 }) {
   return (
-    <Container className="mt-16 py-8 md:py-12">
+    <div className="mt-16 py-8 md:py-12">
       {children}
-    </Container>
+    </div>
   )
 }
