@@ -1,3 +1,4 @@
+import { Container } from "@/shared/components/layout/container"
 import { ReactNode } from "react"
 
 export default function MarketingLayout({
@@ -6,8 +7,8 @@ export default function MarketingLayout({
     children: ReactNode
 }) {
   return (
-    <div className="mt-16 py-8 md:py-12">
+    <Container className="mt-16 py-8 md:py-12">
       {children}
-    </div>
+    </Container>
   )
 }
