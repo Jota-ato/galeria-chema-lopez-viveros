@@ -1,23 +1,14 @@
 "use client";
 
 import { BentoCard } from "@/shared/components/ui/bento-grid";
-import { Route } from "next";
 import { RowsPhotoAlbum } from "react-photo-album";
 import "react-photo-album/rows.css";
-import { Artwork, ArtworkRatio } from "../types/artworks.types";
-
-
-const RATIO_MAP: Record<ArtworkRatio, number> = {
-  wide: 16 / 9,
-  landscape: 4 / 3,
-  portrait: 3 / 4,
-  vertical: 9 / 16,
-};
-
+import { Artwork } from "../types/artworks.types";
+import { RATIO_MAP } from "@/shared/utils/aspect-ration";
 
 interface ArtworkBentoAlbumProps {
   artworks: Artwork[];
-  hrefFor?: (artwork: Artwork) => Route;
+  hrefFor?: (artwork: Artwork) => string;
   targetRowHeight?: number;
   spacing?: number;
 }
@@ -48,7 +39,10 @@ export function ArtworkBentoAlbum({
         photo: (_, { photo, width, height }) => {
           const { artwork } = photo;
           return (
-            <div key={artwork.id} style={{ width, height, position: "relative" }}>
+            <div
+              key={artwork.id}
+              style={{ width, height, position: "relative" }}
+            >
               <BentoCard
                 href={hrefFor(artwork)}
                 name={artwork.title}

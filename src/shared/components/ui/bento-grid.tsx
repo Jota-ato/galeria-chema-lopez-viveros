@@ -17,7 +17,7 @@ interface BentoCardProps extends ComponentPropsWithoutRef<"div"> {
   background: ReactNode
   Icon?: React.ElementType
   description: string
-  href: Route
+  href: string
   cta: string
 }
 
@@ -70,7 +70,7 @@ const BentoCard = ({
           "pointer-events-none flex w-full translate-y-0 transform-gpu flex-row items-center transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 lg:hidden"
         )}
       >
-        <Button variant="link" size="sm" className="pointer-events-auto p-0" render={<Link href={href} />} nativeButton={false}>{cta}<ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" /></Button>
+        <Button variant="link" size="sm" className="pointer-events-auto p-0 text-primary" render={<Link href={href} />} nativeButton={false}>{cta}<ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" /></Button>
       </div>
     </div>
 
