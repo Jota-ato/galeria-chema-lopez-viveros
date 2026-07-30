@@ -6,7 +6,7 @@ import Link from "next/link";
 export function Hero() {
   return (
     <div className="bg-[url('/img/hero.jpeg')] bg-center bg-no-repeat bg-cover min-h-screen">
-      <Container className="bg-black/40 size-full min-h-screen flex flex-col gap-8 items-center justify-end text-white p-8 md:pb-12">
+      <Container className="bg-black/40 size-full! min-h-screen flex flex-col gap-8 items-center justify-end text-white p-8 md:pb-12">
         <Heading className="sm:text-5xl! max-w-xs sm:max-w-xl">
           Pintura contemporánea
         </Heading>
