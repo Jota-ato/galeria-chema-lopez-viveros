@@ -1,4 +1,5 @@
 import { ArtworkForm } from "@/features/artworks/components/artwork-form";
+import { ArtworkImages } from "@/features/artworks/components/artwork-images";
 import { requireAuth } from "@/lib/auth-server";
 import { Heading } from "@/shared/components/typography/heading";
 import {
@@ -34,20 +35,7 @@ export default async function PublishPage() {
           </Card>
         </aside>
         <main className="flex-1">
-          <Card>
-            <CardHeader>
-              <CardTitle>Vista previa</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Image
-                src="/img/artwork1.jpeg"
-                alt="Vista previa de la obra"
-                width={600}
-                height={400}
-                className="rounded-lg"
-              />
-            </CardContent>
-          </Card>
+          <ArtworkImages />
         </main>
       </div>
     </>
