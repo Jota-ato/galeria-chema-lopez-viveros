@@ -14,11 +14,15 @@ export const artworkSchema = z
     title: z.string().min(1, { error: "El título es obligatorio" }),
     description: z.string().optional(),
     price: z
-      .number()
+      .number({ error: "El precio debe ser un entero" })
       .min(0, { error: "El precio debe ser un número positivo" }),
-    width: z.number().min(1, { error: "El ancho debe ser un número positivo" }),
+    width: z
+      .number({ error: "El ancho debe ser un entero" })
+      .int({ error: "El ancho debe ser un entero" })
+      .min(1, { error: "El ancho debe ser un número positivo" }),
     height: z
-      .number()
+      .number({ error: "El alto debe ser un número" })
+      .int({ error: "El precio debe ser un entero" })
       .min(1, { error: "La altura debe ser un número positivo" }),
     aspectRatio,
     imageUrl: z.url({ error: "La imagen es necesaria" }),

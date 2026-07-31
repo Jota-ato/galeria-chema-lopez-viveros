@@ -16,7 +16,7 @@ export const artworksStatus = pgEnum("artworks_status", [
   "exhibition_only",
 ]);
 
-export const aspectRatio = pgEnum("aspect_ratio", ["wide", "landscape", "portrait", "vertical"]);
+export const aspectRatio = pgEnum("aspect_ratio", ["wide", "landscape", "portrait", "vertical", "square"]);
 
 export const artworks = pgTable("artwork", {
   id: uuid("id").primaryKey().defaultRandom(),

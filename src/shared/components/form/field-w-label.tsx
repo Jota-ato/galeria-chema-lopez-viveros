@@ -41,7 +41,7 @@ export function FieldWLabel<TFieldValues extends FieldValues>({
         <Input
           id={name}
           aria-invalid={!!error}
-          {...register(name)}
+          {...register(name, { valueAsNumber: rest.type === "number" })}
           {...(rest as ComponentProps<typeof Input>)}
         />
       )}
