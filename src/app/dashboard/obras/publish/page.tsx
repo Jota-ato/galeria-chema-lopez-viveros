@@ -1,5 +1,6 @@
 import { ArtworkForm } from "@/features/artworks/components/artwork-form";
 import { ArtworkImages } from "@/features/artworks/components/artwork-images";
+import { ConfirmationDialog } from "@/features/artworks/components/confirmation-dialog";
 import { requireAuth } from "@/lib/auth-server";
 import { Heading } from "@/shared/components/typography/heading";
 import {
@@ -9,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 export default async function PublishPage() {
@@ -38,6 +38,7 @@ export default async function PublishPage() {
           <ArtworkImages />
         </main>
       </div>
+      <ConfirmationDialog />
     </>
   );
 }

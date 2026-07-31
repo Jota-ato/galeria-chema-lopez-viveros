@@ -14,7 +14,7 @@ export const artworkSchema = z
     title: z.string().min(1, { error: "El título es obligatorio" }),
     description: z.string().optional(),
     price: z
-      .number({ error: "El precio debe ser un entero" })
+      .number({ error: "El precio debe ser un número válido" })
       .min(0, { error: "El precio debe ser un número positivo" }),
     width: z
       .number({ error: "El ancho debe ser un entero" })
@@ -25,16 +25,14 @@ export const artworkSchema = z
       .int({ error: "El precio debe ser un entero" })
       .min(1, { error: "La altura debe ser un número positivo" }),
     aspectRatio,
-    imageUrl: z.url({ error: "La imagen es necesaria" }),
     fullResolutionImageUrl: z.url().optional(),
-    extraImagesUrl: z.array(z.url()).optional(),
     status,
   })
   .refine(
     (data) => {
       const expectedRatio = RATIO_MAP[data.aspectRatio];
       const actualRatio = data.width / data.height;
-      return Math.abs(actualRatio - expectedRatio) < 0.1;
+      return Math.abs(actualRatio - expectedRatio) < 0.01;
     },
     {
       message:

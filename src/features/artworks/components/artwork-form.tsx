@@ -17,6 +17,7 @@ import {
   RATIO_MAP,
   TRANSLATED_RATIO_MAP,
 } from "@/shared/utils/aspect-ration";
+import { useArtworkStore } from "../stores/artwork-store";
 
 const generalData: FieldInput<ArtworkInput>[] = [
   {
@@ -55,6 +56,13 @@ const dimensionsData: FieldInput<ArtworkInput>[] = [
 ];
 
 export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
+
+  const {
+    setBasicInfo,
+    setConfirmationDialogOpen,
+    basicInfo
+  } = useArtworkStore()
+  
   const {
     handleSubmit,
     register,
@@ -67,6 +75,7 @@ export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
     defaultValues: {
       status: "on_sale",
       aspectRatio: "square",
+      ...basicInfo
     },
   });
 
@@ -81,7 +90,10 @@ export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
     setValue("aspectRatio", estimatedAspectRatio);
   }, [estimatedAspectRatio, setValue]);
 
-  const onSubmit = async (data: ArtworkInput) => {};
+  const onSubmit = async (data: ArtworkInput) => {
+    setBasicInfo(data)
+    setConfirmationDialogOpen(true)
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -98,6 +110,7 @@ export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
           <CustomSelect
             control={control}
             name="status"
+            error={errors.status?.message}
             label="Status de la obra"
             options={artworksStatus.enumValues.map((status) => ({
               label: TRANSLATE_STATUS_MAP[status],
@@ -120,6 +133,7 @@ export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
             control={control}
             name="aspectRatio"
             label="Proporción"
+            error={errors.aspectRatio?.message}
             options={aspectRatio.enumValues.map((ratio) => ({
               label: TRANSLATED_RATIO_MAP[ratio],
               value: ratio,

@@ -100,15 +100,9 @@ export function ArtworkImages({
             </UploadTile>
           </main>
 
-          <footer className="flex max-w-lg gap-4 overflow-x-auto">
-            {(extraImagesUrl ?? []).map((url) => (
-              <ExtraImageThumbnail
-                key={url}
-                url={url}
-                onRemove={() => removeExtraImageUrl(url)}
-              />
-            ))}
+          <p>Imágenes extra</p>
 
+          <footer className="flex max-w-lg gap-4 overflow-x-auto">
             <UploadTile
               id="artwork-extra-images"
               variant="compact"
@@ -117,6 +111,13 @@ export function ArtworkImages({
               isUploading={isExtraUploading}
               onFilesSelected={(files) => startExtraUpload(files)}
             />
+            {(extraImagesUrl ?? []).map((url) => (
+              <ExtraImageThumbnail
+                key={url}
+                url={url}
+                onRemove={() => removeExtraImageUrl(url)}
+              />
+            ))}
           </footer>
         </article>
       </CardContent>
