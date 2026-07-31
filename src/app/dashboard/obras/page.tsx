@@ -1,14 +1,4 @@
-// app/dashboard/obras/page.tsx
 import { Heading } from "@/shared/components/typography/heading";
-import { Plus } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
-import { Button } from "@/shared/components/ui/button";
 import { ArtworkBentoAlbum } from "@/features/artworks/components/artwork-bento-album";
 import { artworksService } from "@/features/artworks/services/artworks-service";
 
@@ -17,21 +7,7 @@ export default async function ArtworksPage() {
 
   return (
     <>
-      <Heading>Obras</Heading>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Nueva obra</CardTitle>
-          <CardDescription>
-            Publica una nueva obra en la galería
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button>
-            Agregar obra <Plus className="size-4" />
-          </Button>
-        </CardContent>
-      </Card>
+      <Heading>Obras más recientes</Heading>
 
       <ArtworkBentoAlbum artworks={artworks} />
 
