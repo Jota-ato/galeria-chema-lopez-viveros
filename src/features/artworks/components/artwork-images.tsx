@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
-import { Plus, Loader2, X } from "lucide-react";
-import { useUploadThing } from "@/lib/uploadthing";
+import { Button } from "@/shared/components/ui/button";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { useArtworkStore } from "../stores/artwork-store";
-import { Button } from "@/shared/components/ui/button";
-import { compressImage } from "@/lib/image-compression";
+import { useArtworkImageUpload } from "../hooks/use-artwork-image-upload";
+import { UploadTile } from "./upload-tile";
 
 interface ArtworkImagesProps {
   initialImageUrl?: string | null;
@@ -23,17 +23,17 @@ export function ArtworkImages({
   initialImageUrl,
   initialExtraImagesUrl,
 }: ArtworkImagesProps) {
-  const mainInputRef = useRef<HTMLInputElement>(null);
-  const extraInputRef = useRef<HTMLInputElement>(null);
-
   const {
     imageUrl,
     setImageUrl,
-    setExtraImagesUrl,
     extraImagesUrl,
+    setExtraImagesUrl,
     addExtraImageUrl,
     removeExtraImageUrl,
   } = useArtworkStore();
+
+  // Hydrate the store from the initial props exactly once, then reset it
+  // on unmount so a fresh mount of this form never inherits stale images.
   useEffect(() => {
     if (initialImageUrl) setImageUrl(initialImageUrl);
     if (initialExtraImagesUrl?.length) setExtraImagesUrl(initialExtraImagesUrl);
@@ -42,45 +42,22 @@ export function ArtworkImages({
       setImageUrl(null);
       setExtraImagesUrl(null);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { startUpload: startMainUpload, isUploading: isMainUploading } =
-    useUploadThing("imageUploader", {
-      onBeforeUploadBegin: async (files) => {
-        return Promise.all(files.map((file) => compressImage(file)));
-      },
-      onClientUploadComplete: (res) => {
-        if (res?.[0]) setImageUrl(res[0].ufsUrl);
-      },
-      onUploadError: (error) => {
-        console.error("Error subiendo imagen principal:", error);
+    useArtworkImageUpload({
+      logLabel: "imagen principal",
+      onSuccess: ([url]) => {
+        if (url) setImageUrl(url);
       },
     });
 
   const { startUpload: startExtraUpload, isUploading: isExtraUploading } =
-    useUploadThing("imageUploader", {
-      onBeforeUploadBegin: async (files) => {
-        return Promise.all(files.map((file) => compressImage(file)));
-      },
-      onClientUploadComplete: (res) => {
-        res?.forEach((f) => addExtraImageUrl(f.ufsUrl));
-      },
-      onUploadError: (error) => {
-        console.error("Error subiendo imágenes extra:", error);
-      },
+    useArtworkImageUpload({
+      logLabel: "imágenes extra",
+      onSuccess: (urls) => urls.forEach(addExtraImageUrl),
     });
-
-  function handleMainFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) startMainUpload([file]);
-    e.target.value = "";
-  }
-
-  function handleExtraFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
-    if (files.length > 0) startExtraUpload(files);
-    e.target.value = "";
-  }
 
   return (
     <Card>
@@ -91,21 +68,15 @@ export function ArtworkImages({
         <article className="flex flex-col gap-4">
           <header>Imagen principal</header>
           <main>
-            <input
-              ref={mainInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleMainFileSelect}
-            />
-            <div
-              className="relative w-full min-h-60 md:h-80 border border-dashed flex flex-col gap-6 items-center justify-center group hover:bg-muted hover:text-primary transition-colors duration-300 cursor-pointer overflow-hidden"
-              onClick={() => mainInputRef.current?.click()}
+            <UploadTile
+              id="artwork-main-image"
+              variant="main"
+              label="Agregar imagen"
+              isUploading={isMainUploading}
+              onFilesSelected={([file]) => file && startMainUpload([file])}
             >
-              {isMainUploading ? (
-                <Loader2 className="size-8 animate-spin" />
-              ) : imageUrl ? (
-                <div className="relative w-full h-full group">
+              {imageUrl && (
+                <div className="relative h-full w-full">
                   <Image
                     src={imageUrl}
                     alt="Imagen principal"
@@ -113,69 +84,64 @@ export function ArtworkImages({
                     className="object-cover"
                   />
                   <Button
-                    variant={"outline"}
-                    size={"icon"}
-                    className="absolute top-2 right-2 hidden group-hover:flex items-center justify-center"
-                    onClick={() => setImageUrl(null)}
+                    variant="outline"
+                    size="icon"
+                    className="absolute right-2 top-2 hidden items-center justify-center group-hover:flex"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setImageUrl(null);
+                    }}
                   >
                     <X />
                   </Button>
                 </div>
-              ) : (
-                <>
-                  <Plus className="size-8 group-hover:text-primary group-hover:stroke-2 transition-all duration-300" />
-                  <span className="text-xl group-hover:font-bold transition-all duration-300">
-                    Agregar imagen
-                  </span>
-                </>
               )}
-            </div>
+            </UploadTile>
           </main>
 
-          <footer className="flex gap-4 max-w-lg overflow-x-auto">
+          <footer className="flex max-w-lg gap-4 overflow-x-auto">
             {(extraImagesUrl ?? []).map((url) => (
-              <div
+              <ExtraImageThumbnail
                 key={url}
-                className="relative h-24 w-32 border shrink-0 group"
-              >
-                <Image
-                  src={url}
-                  alt="Imagen extra"
-                  fill
-                  className="object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeExtraImageUrl(url)}
-                  className="absolute top-1 right-1 bg-background/80 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <X className="size-3" />
-                </button>
-              </div>
+                url={url}
+                onRemove={() => removeExtraImageUrl(url)}
+              />
             ))}
 
-            <input
-              ref={extraInputRef}
-              type="file"
-              accept="image/*"
+            <UploadTile
+              id="artwork-extra-images"
+              variant="compact"
               multiple
-              className="hidden"
-              onChange={handleExtraFileSelect}
+              label="Agregar imagen extra"
+              isUploading={isExtraUploading}
+              onFilesSelected={(files) => startExtraUpload(files)}
             />
-            <div
-              aria-label="Agregar imagen extra"
-              className="h-24 w-32 shrink-0 border border-dashed flex flex-col gap-2 items-center justify-center group hover:bg-muted hover:text-primary transition-colors duration-300 cursor-pointer"
-              onClick={() => extraInputRef.current?.click()}
-            >
-              {isExtraUploading ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <Plus className="size-4 group-hover:size-6 group-hover:text-primary group-hover:stroke-2 transition-all duration-300" />
-              )}
-            </div>
           </footer>
         </article>
       </CardContent>
     </Card>
+  );
+}
+
+function ExtraImageThumbnail({
+  url,
+  onRemove,
+}: {
+  url: string;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="group relative h-24 w-32 shrink-0 border">
+      <Image src={url} alt="Imagen extra" fill className="object-cover" />
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label="Eliminar imagen"
+        className="absolute right-1 top-1 rounded-full bg-background/80 p-1 opacity-0 transition-opacity group-hover:opacity-100"
+      >
+        <X className="size-3" />
+      </button>
+    </div>
   );
 }
