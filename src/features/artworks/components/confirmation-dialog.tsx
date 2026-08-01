@@ -13,13 +13,21 @@ import { Heading } from "@/shared/components/typography/heading";
 import { SummaryCard } from "./summary-card";
 import { ArtworkInput } from "../schema/artwork-schema";
 import { ImagesSumary } from "./images-sumary";
+import { useState } from "react";
+import { Spinner } from "@/shared/components/ui/spinner";
+import { showResponse } from "@/shared/lib/client-actions";
+import { createArtworkAction } from "../actions/artworks-actions";
 
 function NoImageDialog({ onClose }: { onClose: () => void }) {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>No puedes subir una obra sin una imagen principal</DialogTitle>
-        <DialogDescription>Agrega al menos una imagen principal</DialogDescription>
+        <DialogTitle>
+          No puedes subir una obra sin una imagen principal
+        </DialogTitle>
+        <DialogDescription>
+          Agrega al menos una imagen principal
+        </DialogDescription>
       </DialogHeader>
 
       <div
@@ -48,6 +56,30 @@ function UploadConfirmationDialog({
   extraImages: string[];
   basicInfo: ArtworkInput;
 }) {
+  const {
+    setConfirmationDialogOpen,
+    setBasicInfo,
+    setExtraImagesUrl,
+    setImageUrl,
+  } = useArtworkStore();
+  const [isUploading, setIsUploading] = useState(false);
+
+  const uploadArtwork = async () => {
+    setIsUploading(true);
+    const response = showResponse(
+      await createArtworkAction(basicInfo, { imageUrl, extraImages }),
+    );
+    setIsUploading(false);
+
+    if (response) {
+      if (response.success) {
+        setConfirmationDialogOpen(false);
+        setBasicInfo(null);
+        setImageUrl(null);
+        setExtraImagesUrl([]);
+      }
+    }
+  };
 
   return (
     <>
@@ -57,7 +89,7 @@ function UploadConfirmationDialog({
       </DialogHeader>
 
       <div className="space-y-6">
-        <ImagesSumary 
+        <ImagesSumary
           basicInfo={basicInfo}
           imageUrl={imageUrl}
           extraImages={extraImages}
@@ -71,7 +103,16 @@ function UploadConfirmationDialog({
         </div>
       </div>
 
-      <Button>Subir obra</Button>
+      <Button onClick={uploadArtwork} disabled={isUploading}>
+        {isUploading ? (
+          <span className="flex gap-2">
+            <Spinner />
+            Subiendo...
+          </span>
+        ) : (
+          "Subir obra"
+        )}
+      </Button>
     </>
   );
 }
@@ -95,7 +136,10 @@ export function ConfirmationDialog() {
   const extraImages = extraImagesUrl ?? [];
 
   return (
-    <Dialog open={confirmationDialogOpen} onOpenChange={setConfirmationDialogOpen}>
+    <Dialog
+      open={confirmationDialogOpen}
+      onOpenChange={setConfirmationDialogOpen}
+    >
       <DialogContent className="max-h-9/10 max-w-2xl! overflow-auto">
         {hasImage ? (
           <UploadConfirmationDialog

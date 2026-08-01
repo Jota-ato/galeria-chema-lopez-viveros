@@ -82,7 +82,6 @@ export function notLoggedAction<T extends any[], R>(
     ...args: T
   ): Promise<NonPromiseActionResponse<InferActionData<R>>> => {
     try {
-
       const result = await callback(...args);
       if (tag) {
         revalidateTag(tag, "max");

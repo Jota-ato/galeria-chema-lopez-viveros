@@ -7,12 +7,14 @@ import { NonPromiseActionResponse } from "./actions";
  * * @param response la respuesta genérica de una acción
  * @returns el contenido de response.data tipado con precisión o undefined si falló
  */
-export const showResponse = <T,>(response: NonPromiseActionResponse<T>): T | undefined => {
-    if (response.success) {
-        toast.success(response.message);
-        return response.data;
-    } else {
-        toast.error(response.message);
-        return undefined;
-    }
+export const showResponse = <T>(
+  response: NonPromiseActionResponse<T>,
+): T | undefined => {
+  if (response.success) {
+    toast.success(response.message);
+    return response.data;
+  } else {
+    toast.error(response.message);
+    return response.data;
+  }
 };
