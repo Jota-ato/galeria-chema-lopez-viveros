@@ -14,7 +14,6 @@ import { TRANSLATE_STATUS_MAP } from "../utils/status";
 import { useEffect, useMemo } from "react";
 import {
   getClosestAspectRatio,
-  RATIO_MAP,
   TRANSLATED_RATIO_MAP,
 } from "@/shared/utils/aspect-ration";
 import { useArtworkStore } from "../stores/artwork-store";
@@ -38,6 +37,12 @@ const generalData: FieldInput<ArtworkInput>[] = [
     type: "number",
     placeholder: "Precio de la obra",
   },
+  {
+    name: "fullResolutionImageUrl",
+    label: "Imagen en alta resolución",
+    type: "text",
+    placeholder: "URL de la imagen en alta resolución",
+  }
 ];
 
 const dimensionsData: FieldInput<ArtworkInput>[] = [

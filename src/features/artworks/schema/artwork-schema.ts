@@ -25,7 +25,7 @@ export const artworkSchema = z
       .int({ error: "El precio debe ser un entero" })
       .min(1, { error: "La altura debe ser un número positivo" }),
     aspectRatio,
-    fullResolutionImageUrl: z.url().optional(),
+    fullResolutionImageUrl: z.string().optional().nullable(),
     status,
   })
   .refine(
