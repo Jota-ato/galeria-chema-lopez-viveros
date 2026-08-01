@@ -1,3 +1,5 @@
+import { ArtworkImage } from "@/features/artworks/components/artwork-image";
+import { ImagesCarousel } from "@/features/artworks/components/images-carousel";
 import { artworksService } from "@/features/artworks/services/artworks-service";
 import { Container } from "@/shared/components/layout/container";
 import { Heading } from "@/shared/components/typography/heading";
@@ -78,13 +80,11 @@ export default async function ArtworkPage({
 
       <section className="flex flex-col md:flex-row gap-6 md:gap-8">
         <div>
-          <Image
-            src={artwork.imageUrl}
-            alt={`Imagen de la obra ${artwork.title}`}
-            width={ratio * 1000}
-            height={1000}
-            className="rounded-lg"
-          />
+          {artwork.images.length ? (
+            <ImagesCarousel artwork={artwork} />
+          ) : (
+            <ArtworkImage ratio={ratio} image={artwork.imageUrl} />
+          )}
         </div>
         <div className="flex flex-col gap-4">
           <p>{artwork.description}</p>

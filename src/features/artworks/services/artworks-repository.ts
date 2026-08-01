@@ -1,10 +1,14 @@
 import { db } from "@/db";
-import { Artwork, NewArtwork } from "../types/artworks.types";
+import {
+  Artwork,
+  ArtworkWithImages,
+  NewArtwork,
+} from "../types/artworks.types";
 import { artworks } from "@/db/schema/artworks";
 
 export interface IArtworksRepository {
   getLatest(limit: number, page: number): Promise<Artwork[]>;
-  getBySlug(slug: string): Promise<Artwork | null>;
+  getBySlug(slug: string): Promise<ArtworkWithImages | null>;
   insert(data: NewArtwork): Promise<Artwork>;
 }
 
@@ -17,10 +21,13 @@ class ArtworksRepository implements IArtworksRepository {
     });
   }
 
-  async getBySlug(slug: string): Promise<Artwork | null> {
+  async getBySlug(slug: string): Promise<ArtworkWithImages | null> {
     return (
       (await db.query.artworks.findFirst({
         where: { slug },
+        with: {
+          images: true,
+        },
       })) || null
     );
   }
