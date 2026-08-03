@@ -14,6 +14,7 @@ interface ArtworkBentoAlbumProps {
   spacing?: number;
   onAddArtwork?: () => void;
   addArtworkHref?: string;
+  admin?: boolean;
 }
 
 const ADD_CARD_RATIO = 1;
@@ -23,6 +24,7 @@ export function ArtworkBentoAlbum({
   hrefFor = (artwork) => `/obras/${artwork.slug}`,
   targetRowHeight = 280,
   spacing = 12,
+  admin = false,
 }: ArtworkBentoAlbumProps) {
   const artworkPhotos = artworks.map((artwork) => {
     const ratio = RATIO_MAP[artwork.aspectRatio];
@@ -38,13 +40,13 @@ export function ArtworkBentoAlbum({
 
   const addCardPhoto = {
     key: "__add-artwork__",
-    src: "", 
+    src: "",
     width: ADD_CARD_RATIO * 1000,
     height: 1000,
     isAddCard: true as const,
   };
 
-  const photos = [addCardPhoto, ...artworkPhotos];
+  const photos = admin ? [addCardPhoto, ...artworkPhotos] : artworkPhotos;
 
   return (
     <RowsPhotoAlbum
@@ -65,9 +67,7 @@ export function ArtworkBentoAlbum({
                   description=""
                   className="relative size-full"
                   Icon={Plus}
-                  background={
-                    <div className="absolute size-full bg-card"/>
-                  }
+                  background={<div className="absolute size-full bg-card" />}
                   cta="Nueva obra"
                 />
               </div>

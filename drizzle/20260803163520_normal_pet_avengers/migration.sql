@@ -1,0 +1,1 @@
+ALTER TYPE "aspect_ratio" ADD VALUE 'square';
