@@ -39,7 +39,7 @@ export function ArtworkInfiniteScroll({ initialArtworks }: Props) {
       (entries) => {
         if (entries[0].isIntersecting) loadMore();
       },
-      { rootMargin: "300px" },
+      { rootMargin: "100px" },
     );
 
     observer.observe(sentinel);
@@ -55,12 +55,6 @@ export function ArtworkInfiniteScroll({ initialArtworks }: Props) {
       {isLoading && (
         <p className="text-center text-sm text-muted-foreground py-4">
           Cargando más obras...
-        </p>
-      )}
-
-      {!hasMore && artworks.length > 0 && (
-        <p className="text-center text-sm text-muted-foreground py-4">
-          No hay más obras por mostrar
         </p>
       )}
     </>

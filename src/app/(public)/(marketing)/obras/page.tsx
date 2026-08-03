@@ -13,7 +13,7 @@ export default async function ObrasPage() {
 
       <section className="bg-secondary min-h-screen my-8 md:my-12 py-8 flex items-center justify-center">
         <Container>
-          <Heading>Mis obra más recientes</Heading>
+          <Heading className="text-left mb-8">Mis obra más recientes</Heading>
 
           <ArtworkInfiniteScroll initialArtworks={artworks} />
         </Container>
