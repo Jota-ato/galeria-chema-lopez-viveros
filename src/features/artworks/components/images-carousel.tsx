@@ -30,8 +30,8 @@ export function ImagesCarousel({ artwork }: { artwork: ArtworkWithImages }) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="absolute left-2" />
+      <CarouselNext className="absolute right-2" />
     </Carousel>
   );
 }
