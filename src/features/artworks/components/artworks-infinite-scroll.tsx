@@ -39,7 +39,7 @@ export function ArtworkInfiniteScroll({ initialArtworks }: Props) {
       (entries) => {
         if (entries[0].isIntersecting) loadMore();
       },
-      { rootMargin: "100px" },
+      { rootMargin: "250px" },
     );
 
     observer.observe(sentinel);
