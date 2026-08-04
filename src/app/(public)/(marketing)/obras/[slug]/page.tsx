@@ -1,4 +1,5 @@
 import { ArtworkImage } from "@/features/artworks/components/artwork-image";
+import { ArtworkNotFound } from "@/features/artworks/components/artwork-not-found";
 import { ImagesCarousel } from "@/features/artworks/components/images-carousel";
 import { artworksService } from "@/features/artworks/services/artworks-service";
 import { Container } from "@/shared/components/layout/container";
@@ -9,13 +10,11 @@ import { RATIO_MAP } from "@/shared/utils/aspect-ration";
 import { generateMetadataTitle } from "@/shared/utils/metadata";
 import { formatPrice } from "@/shared/utils/price";
 import { generateWhatsappMessageLink } from "@/shared/utils/whatsapp";
-import { notFound } from "next/navigation";
 import { cache } from "react";
 
 const getCachedArtwork = cache(
   async (slug: string) => await artworksService.getArtworkBySlug(slug),
 );
-
 export async function generateMetadata({
   params,
 }: {
@@ -25,7 +24,14 @@ export async function generateMetadata({
 
   const artwork = await getCachedArtwork(slug);
 
-  if (!artwork) notFound();
+  if (!artwork) {
+    return {
+      title: generateMetadataTitle("Obra no encontrada"),
+      description:
+        "La obra que estás buscando no se encuentra en la galería de Chema López Viveros.",
+      robots: { index: false, follow: false },
+    };
+  }
 
   const ratio = RATIO_MAP[artwork.aspectRatio];
   const title = generateMetadataTitle(artwork.title);
@@ -70,7 +76,7 @@ export default async function ArtworkPage({
 
   const artwork = await getCachedArtwork(slug);
 
-  if (!artwork) notFound();
+  if (!artwork) return <ArtworkNotFound slug={slug} />;
 
   const ratio = RATIO_MAP[artwork.aspectRatio];
 
