@@ -8,7 +8,7 @@ import { Separator } from "@/shared/components/ui/separator";
 import { RATIO_MAP } from "@/shared/utils/aspect-ration";
 import { generateMetadataTitle } from "@/shared/utils/metadata";
 import { formatPrice } from "@/shared/utils/price";
-import Image from "next/image";
+import { generateWhatsappMessageLink } from "@/shared/utils/whatsapp";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
@@ -74,6 +74,8 @@ export default async function ArtworkPage({
 
   const ratio = RATIO_MAP[artwork.aspectRatio];
 
+  const contactMessage = `Hola, estoy interesado en la obra "${artwork.title}" que vi en la galería de Chema López Viveros. ¿Podrías darme más información sobre ella?`;
+
   return (
     <Container className="space-y-4">
       <Heading>{artwork.title}</Heading>
@@ -86,9 +88,28 @@ export default async function ArtworkPage({
             <ArtworkImage ratio={ratio} image={artwork.imageUrl} />
           )}
         </div>
-        <div className="flex flex-col gap-4">
-          <p>{artwork.description}</p>
-          <Separator />
+        <div className="flex flex-col gap-4 flex-1">
+          {artwork.description && (
+            <>
+              <p>{artwork.description}</p>
+              <Separator />
+            </>
+          )}
+          {artwork.fullResolutionImageUrl && (
+            <Button
+              variant="link"
+              render={
+                <a
+                  href={artwork.fullResolutionImageUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+              nativeButton={false}
+            >
+              Ver imagen en resolución completa
+            </Button>
+          )}
           <Heading className="text-left" level={2}>
             Precio
           </Heading>
@@ -97,7 +118,7 @@ export default async function ArtworkPage({
           <Button
             render={
               <a
-                href={`https://wa.me/${process.env.ARTIST_PHONE}`}
+                href={generateWhatsappMessageLink(contactMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
               />
