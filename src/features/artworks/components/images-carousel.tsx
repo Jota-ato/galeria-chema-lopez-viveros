@@ -18,7 +18,7 @@ export function ImagesCarousel({ artwork }: { artwork: ArtworkWithImages }) {
         align: "start",
         active: true,
       }}
-      className="max-w-5xl"
+      className="max-w-3xl"
     >
       <CarouselContent>
         <CarouselItem key={artwork.id}>
