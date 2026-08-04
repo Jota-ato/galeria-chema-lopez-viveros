@@ -4,12 +4,14 @@ import { ImagesCarousel } from "@/features/artworks/components/images-carousel";
 import { artworksService } from "@/features/artworks/services/artworks-service";
 import { Container } from "@/shared/components/layout/container";
 import { Heading } from "@/shared/components/typography/heading";
+import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Separator } from "@/shared/components/ui/separator";
 import { RATIO_MAP } from "@/shared/utils/aspect-ration";
 import { generateMetadataTitle } from "@/shared/utils/metadata";
 import { formatPrice } from "@/shared/utils/price";
 import { generateWhatsappMessageLink } from "@/shared/utils/whatsapp";
+import { ExternalLink, MessageCircle } from "lucide-react";
 import { cache } from "react";
 
 const getCachedArtwork = cache(
@@ -84,8 +86,6 @@ export default async function ArtworkPage({
 
   return (
     <Container className="space-y-4">
-      <Heading>{artwork.title}</Heading>
-
       <section className="flex flex-col md:flex-row gap-6 md:gap-8">
         <div>
           {artwork.images.length ? (
@@ -95,44 +95,85 @@ export default async function ArtworkPage({
           )}
         </div>
         <div className="flex flex-col gap-4 flex-1">
-          {artwork.description && (
-            <>
-              <p>{artwork.description}</p>
-              <Separator />
-            </>
-          )}
-          {artwork.fullResolutionImageUrl && (
+          <div>
+            <Heading className="text-left text-2xl md:text-3xl font-bold tracking-tight">
+              {artwork.title}
+            </Heading>
+            {artwork.description && (
+              <p className="mt-3 text-muted-foreground leading-relaxed text-sm md:text-base">
+                {artwork.description}
+              </p>
+            )}
+          </div>
+
+          <div className="text-xs text-muted-foreground space-y-1 bg-muted/40 p-3 rounded-md border border-border/50">
+            <p>
+              <span className="font-medium text-foreground">Dimensiones:</span>{" "}
+              {artwork.width} x {artwork.height} cm
+            </p>
+            <p>
+              <span className="font-medium text-foreground">Estado:</span>{" "}
+              <Badge
+                variant={
+                  artwork.status === "exhibition_only" ? "outline" : "default"
+                }
+              >
+                {artwork.status === "on_sale" ? "Disponible" : "Consultar"}
+              </Badge>
+            </p>
+          </div>
+
+          <Separator />
+
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Precio
+            </span>
+            <div className="flex items-baseline gap-1.5 mt-1">
+              <p className="text-2xl md:text-3xl font-bold text-foreground">
+                {formatPrice(artwork.price)}
+              </p>
+              <span className="text-xs font-medium text-muted-foreground">
+                MXN
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 pt-2">
             <Button
-              variant="link"
+              className="w-full gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-medium shadow-sm transition-colors py-6 text-base"
               render={
                 <a
-                  href={artwork.fullResolutionImageUrl}
+                  href={generateWhatsappMessageLink(contactMessage)}
                   target="_blank"
                   rel="noopener noreferrer"
                 />
               }
               nativeButton={false}
             >
-              Ver imagen en resolución completa
+              <MessageCircle className="w-5 h-5 fill-current" />
+              Comprar vía WhatsApp
             </Button>
-          )}
-          <Heading className="text-left" level={2}>
-            Precio
-          </Heading>
-          <p>{formatPrice(artwork.price)}</p>
-          <Separator />
-          <Button
-            render={
-              <a
-                href={generateWhatsappMessageLink(contactMessage)}
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            }
-            nativeButton={false}
-          >
-            Comprar obra
-          </Button>
+
+            {artwork.fullResolutionImageUrl && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full text-xs text-muted-foreground hover:text-foreground gap-1.5"
+                render={
+                  <a
+                    href={artwork.fullResolutionImageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
+                nativeButton={false}
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                Ver en alta resolución
+              </Button>
+            )}
+          </div>
         </div>
       </section>
     </Container>
