@@ -21,6 +21,8 @@ import {
   TRANSLATED_COLLECTION_STATUS,
 } from "../helpers/status";
 import { Upload } from "lucide-react";
+import { useEffect } from "react";
+import { generateSlug } from "@/shared/lib/slug";
 
 export function CollectionForm() {
   const {
@@ -28,6 +30,7 @@ export function CollectionForm() {
     register,
     control,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<CollectionInput>({
     resolver: zodResolver(collectionSchema),
@@ -37,6 +40,10 @@ export function CollectionForm() {
   });
 
   const status = watch("status");
+  const name = watch("name");
+  useEffect(() => {
+    if (name) setValue("slug", generateSlug(name));
+  }, [name, setValue]);
 
   const onSubmit = async (data: CollectionInput) => {};
 
@@ -77,9 +84,9 @@ export function CollectionForm() {
                 value: status,
               }))}
             />
-            <div className="border border-dashed rounded-md flex flex-col items-center justify-center gap-2 p-4">
-              <Upload />
-              <p className="text-xs text-muted-foreground">
+            <div className="border border-dashed rounded-md flex flex-col items-center justify-center gap-2 p-4 group hover:border-primary transition-all duration-250">
+              <Upload className="group-hover:scale-110 transition-all duration-250" />
+              <p className="text-xs text-muted-foreground hover:text-foreground duration-250 transition-all">
                 Subir imagen de banner
               </p>
             </div>
