@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "../ui/field";
+import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
 
 interface SelectOption {
   value: string;
@@ -23,6 +23,7 @@ interface GenericSelectProps<T extends FieldValues> {
   groupLabel?: string;
   label?: string;
   error?: string | null;
+  description?: string;
 }
 
 export function CustomSelect<T extends FieldValues>({
@@ -33,6 +34,7 @@ export function CustomSelect<T extends FieldValues>({
   groupLabel,
   label,
   error,
+  description,
 }: GenericSelectProps<T>) {
   return (
     <Controller
@@ -46,6 +48,7 @@ export function CustomSelect<T extends FieldValues>({
         return (
           <Field>
             {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+            {description && <FieldDescription>{description}</FieldDescription>}
             <Select  aria-invalid={!!error} value={field.value} onValueChange={field.onChange}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder={placeholder}>
