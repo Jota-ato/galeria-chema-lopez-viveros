@@ -21,7 +21,7 @@ import {
   TRANSLATED_COLLECTION_STATUS,
 } from "../helpers/status";
 import { Upload } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { generateSlug } from "@/shared/lib/slug";
 
 export function CollectionForm() {
@@ -41,8 +41,12 @@ export function CollectionForm() {
 
   const status = watch("status");
   const name = watch("name");
-  useEffect(() => {
-    if (name) setValue("slug", generateSlug(name));
+
+  const slug = useMemo(() => {
+    if (!name) return "";
+    const slug = generateSlug(name);
+    setValue("slug", slug);
+    return slug;
   }, [name, setValue]);
 
   const onSubmit = async (data: CollectionInput) => {};
@@ -61,7 +65,9 @@ export function CollectionForm() {
               Este es el identificador único de la colección, se genera
               automáticamente a partir del nombre.
             </FieldDescription>
-            <Input disabled placeholder="ej. Gatos" />
+            <div className="bg-muted text-muted-foreground p-1 px-2 rounded-md border border-border">
+                {slug ? slug : "El slug se generará automáticamente a partir del nombre de la colección."}
+            </div>
           </Field>
           <Field>
             <FieldLabel htmlFor="description">Descripción</FieldLabel>
