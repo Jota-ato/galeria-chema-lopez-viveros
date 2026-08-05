@@ -42,7 +42,6 @@ export function ArtworkImages({
       setImageUrl(null);
       setExtraImagesUrl(null);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { startUpload: startMainUpload, isUploading: isMainUploading } =
