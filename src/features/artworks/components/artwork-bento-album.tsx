@@ -12,8 +12,6 @@ interface ArtworkBentoAlbumProps {
   hrefFor?: (artwork: Artwork) => string;
   targetRowHeight?: number;
   spacing?: number;
-  onAddArtwork?: () => void;
-  addArtworkHref?: string;
   admin?: boolean;
 }
 
