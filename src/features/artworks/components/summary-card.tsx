@@ -67,17 +67,14 @@ export function SummaryCard({ basicInfo }: { basicInfo: ArtworkInput }) {
           <>
             <Separator />
             <div className="space-y-2">
-              <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Link2 className="size-4" />
-                Imagen en alta resolución
-              </p>
               <a
                 href={basicInfo.fullResolutionImageUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="break-all rounded-xl bg-background/80 p-4 text-sm text-primary ring-1 ring-foreground/5 transition-colors hover:bg-background"
+                className="flex items-center gap-2 text-sm text-muted-foreground"
               >
-                {basicInfo.fullResolutionImageUrl}
+                <Link2 className="size-4" />
+                Imagen en alta resolución
               </a>
             </div>
           </>

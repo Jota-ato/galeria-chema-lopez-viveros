@@ -12,7 +12,7 @@ export const status = z.enum(artworksStatus.enumValues, {
 export const artworkSchema = z
   .object({
     title: z.string().min(1, { error: "El título es obligatorio" }),
-    description: z.string().optional(),
+    description: z.string().optional().nullable(),
     price: z
       .number({ error: "El precio debe ser un número válido" })
       .min(0, { error: "El precio debe ser un número positivo" }),

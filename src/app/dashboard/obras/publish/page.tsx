@@ -1,15 +1,8 @@
-import { ArtworkForm } from "@/features/artworks/components/artwork-form";
-import { ArtworkImages } from "@/features/artworks/components/artwork-images";
-import { ConfirmationDialog } from "@/features/artworks/components/confirmation-dialog";
+
+import { ArtworkPanel } from "@/features/artworks/components/artwork-panel";
 import { requireAuth } from "@/lib/auth-server";
 import { Heading } from "@/shared/components/typography/heading";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
+
 import { redirect } from "next/navigation";
 
 export default async function PublishPage() {
@@ -20,25 +13,7 @@ export default async function PublishPage() {
     <>
       <Heading>Publicar obra</Heading>
 
-      <div className="flex flex-col md:flex-row gap-4">
-        <aside className="w-full md:w-1/3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Detalles de la obra</CardTitle>
-              <CardDescription>
-                Aquí puedes agregar los detalles de la obra que deseas publicar.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ArtworkForm />
-            </CardContent>
-          </Card>
-        </aside>
-        <main className="flex-1">
-          <ArtworkImages />
-        </main>
-      </div>
-      <ConfirmationDialog />
+      <ArtworkPanel />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { ArtworkImage } from "@/features/artworks/components/artwork-image";
 import { ArtworkNotFound } from "@/features/artworks/components/artwork-not-found";
 import { ImagesCarousel } from "@/features/artworks/components/images-carousel";
-import { artworksService } from "@/features/artworks/services/artworks-service";
+import { requireAuth } from "@/lib/auth-server";
 import { Container } from "@/shared/components/layout/container";
 import { Heading } from "@/shared/components/typography/heading";
 import { Badge } from "@/shared/components/ui/badge";
@@ -11,12 +11,10 @@ import { RATIO_MAP } from "@/shared/utils/aspect-ration";
 import { generateMetadataTitle } from "@/shared/utils/metadata";
 import { formatPrice } from "@/shared/utils/price";
 import { generateWhatsappMessageLink } from "@/shared/utils/whatsapp";
-import { ExternalLink, MessageCircle } from "lucide-react";
-import { cache } from "react";
+import { ExternalLink, MessageCircle, PenSquareIcon } from "lucide-react";
+import Link from "next/link";
+import { getCachedArtwork } from "@/shared/lib/cache";
 
-const getCachedArtwork = cache(
-  async (slug: string) => await artworksService.getArtworkBySlug(slug),
-);
 export async function generateMetadata({
   params,
 }: {
@@ -75,6 +73,7 @@ export default async function ArtworkPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const { session } = await requireAuth();
 
   const artwork = await getCachedArtwork(slug);
 
@@ -169,8 +168,18 @@ export default async function ArtworkPage({
                 }
                 nativeButton={false}
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="size-4" />
                 Ver en alta resolución
+              </Button>
+            )}
+            {session && (
+              <Button
+                render={<Link href={`/dashboard/obras/edit/${artwork.slug}`} />}
+                nativeButton={false}
+                variant="outline"
+              >
+                <PenSquareIcon />
+                Editar
               </Button>
             )}
           </div>

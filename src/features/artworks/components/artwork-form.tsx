@@ -42,7 +42,7 @@ const generalData: FieldInput<ArtworkInput>[] = [
     label: "Imagen en alta resolución",
     type: "text",
     placeholder: "URL de la imagen en alta resolución",
-  }
+  },
 ];
 
 const dimensionsData: FieldInput<ArtworkInput>[] = [
@@ -60,14 +60,10 @@ const dimensionsData: FieldInput<ArtworkInput>[] = [
   },
 ];
 
-export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
+export function ArtworkForm() {
+  const { setBasicInfo, setConfirmationDialogOpen, basicInfo } =
+    useArtworkStore();
 
-  const {
-    setBasicInfo,
-    setConfirmationDialogOpen,
-    basicInfo
-  } = useArtworkStore()
-  
   const {
     handleSubmit,
     register,
@@ -80,7 +76,7 @@ export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
     defaultValues: {
       status: "on_sale",
       aspectRatio: "square",
-      ...basicInfo
+      ...basicInfo,
     },
   });
 
@@ -96,8 +92,8 @@ export function ArtworkForm({ artwork }: { artwork?: Artwork }) {
   }, [estimatedAspectRatio, setValue]);
 
   const onSubmit = async (data: ArtworkInput) => {
-    setBasicInfo(data)
-    setConfirmationDialogOpen(true)
+    setBasicInfo(data);
+    setConfirmationDialogOpen(true);
   };
 
   return (
