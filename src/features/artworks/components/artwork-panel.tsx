@@ -39,7 +39,7 @@ export function ArtworkPanel({ artwork }: { artwork?: ArtworkWithImages }) {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ArtworkForm />
+              <ArtworkForm artwork={artwork} />
             </CardContent>
           </Card>
         </aside>
@@ -47,7 +47,7 @@ export function ArtworkPanel({ artwork }: { artwork?: ArtworkWithImages }) {
           <ArtworkImages />
         </main>
       </div>
-      <ConfirmationDialog />
+      <ConfirmationDialog artworkSlug={artwork?.slug} />
     </>
   );
 }

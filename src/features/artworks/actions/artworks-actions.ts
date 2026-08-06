@@ -21,9 +21,32 @@ export const createArtworkAction = adminAction(
 
     const artwork = await artworksService.insertArtwork(data, images);
     return {
-        success: true, 
-        message: `Obra ${artwork.title} creada con éxito`,
-        data: artwork
+      success: true,
+      message: `Obra ${artwork.title} creada con éxito`,
+      data: artwork,
+    };
+  },
+);
+export const updateArtworkAction = adminAction(
+  async (
+    data: ArtworkInput,
+    images: {
+      imageUrl: string;
+      extraImages: string[];
+    },
+    slug: string,
+  ) => {
+    const zodResponse = artworkSchema.safeParse(data);
+
+    if (!zodResponse.success) {
+      throw new AppError("Datos inválidos");
+    }
+
+    const artwork = await artworksService.editArtwork(data, images, slug);
+    return {
+      success: true,
+      message: `Obra ${artwork.title} actualizada con éxito`,
+      data: artwork,
     };
   },
 );

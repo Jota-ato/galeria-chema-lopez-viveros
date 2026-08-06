@@ -37,13 +37,10 @@ export default async function EditArtworkPage({
 
   return (
     <>
-      <header className="p-4 rounded-md bg-card border boder-border flex gap-4 flex-col md:flex-row md:items-center md:justify-between">
+      <header className="p-4 rounded-md bg-card flex gap-4 flex-col md:flex-row md:items-center md:justify-between">
         <Heading className="text-left text-xl! font-medium">
           Editar obra: {artwork.title}
         </Heading>
-        <Button>
-          <Save /> Guardar
-        </Button>
       </header>
       <ArtworkPanel artwork={artwork} />
     </>

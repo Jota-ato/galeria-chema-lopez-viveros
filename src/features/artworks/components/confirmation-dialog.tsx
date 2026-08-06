@@ -16,7 +16,10 @@ import { ImagesSumary } from "./images-sumary";
 import { useState } from "react";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { showResponse } from "@/shared/lib/client-actions";
-import { createArtworkAction } from "../actions/artworks-actions";
+import {
+  createArtworkAction,
+  updateArtworkAction,
+} from "../actions/artworks-actions";
 
 function NoImageDialog({ onClose }: { onClose: () => void }) {
   return (
@@ -51,11 +54,15 @@ function UploadConfirmationDialog({
   imageUrl,
   extraImages,
   basicInfo,
+  artworkSlug,
 }: {
   imageUrl: string;
   extraImages: string[];
   basicInfo: ArtworkInput;
+  artworkSlug?: string;
 }) {
+  const isEditing = !!artworkSlug;
+
   const {
     setConfirmationDialogOpen,
     setBasicInfo,
@@ -67,7 +74,13 @@ function UploadConfirmationDialog({
   const uploadArtwork = async () => {
     setIsUploading(true);
     const response = showResponse(
-      await createArtworkAction(basicInfo, { imageUrl, extraImages }),
+      isEditing
+        ? await updateArtworkAction(
+            basicInfo,
+            { imageUrl, extraImages },
+            artworkSlug,
+          )
+        : await createArtworkAction(basicInfo, { imageUrl, extraImages }),
     );
     setIsUploading(false);
 
@@ -84,7 +97,9 @@ function UploadConfirmationDialog({
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Subir {basicInfo.title}</DialogTitle>
+        <DialogTitle>
+          {isEditing ? "Editar" : "Publicar"} {basicInfo.title}
+        </DialogTitle>
         <DialogDescription>{basicInfo.description}</DialogDescription>
       </DialogHeader>
 
@@ -107,10 +122,12 @@ function UploadConfirmationDialog({
         {isUploading ? (
           <span className="flex gap-2">
             <Spinner />
-            Subiendo...
+            {isEditing ? "Guardando..." : "Publicando..."}
           </span>
+        ) : isEditing ? (
+          "Guardar obra"
         ) : (
-          "Subir obra"
+          "Publicar obra"
         )}
       </Button>
     </>
@@ -121,7 +138,7 @@ function UploadConfirmationDialog({
    3. Dialog contenedor (orquesta los otros 2)
    ───────────────────────────────────────────── */
 
-export function ConfirmationDialog() {
+export function ConfirmationDialog({ artworkSlug }: { artworkSlug?: string }) {
   const {
     confirmationDialogOpen,
     setConfirmationDialogOpen,
@@ -146,6 +163,7 @@ export function ConfirmationDialog() {
             imageUrl={imageUrl!}
             extraImages={extraImages}
             basicInfo={basicInfo}
+            artworkSlug={artworkSlug}
           />
         ) : (
           <NoImageDialog onClose={() => setConfirmationDialogOpen(false)} />

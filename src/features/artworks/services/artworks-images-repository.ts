@@ -1,8 +1,10 @@
 import { db } from "@/db";
 import { artworksImages } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export interface IArtworksImagesRepository {
   insert(images: string[] | string, artworkId: string): Promise<void>;
+  deleteByArtworkId(artworkId: string): Promise<void>;
 }
 
 class ArtworksImagesRepository implements IArtworksImagesRepository {
@@ -14,6 +16,12 @@ class ArtworksImagesRepository implements IArtworksImagesRepository {
         artworkId,
       })),
     );
+  }
+
+  async deleteByArtworkId(artworkId: string): Promise<void> {
+    await db
+      .delete(artworksImages)
+      .where(eq(artworksImages.artworkId, artworkId));
   }
 }
 

@@ -49,6 +49,35 @@ class ArworksService {
     return artwork;
   }
 
+  async editArtwork(
+    data: ArtworkInput,
+    images: {
+      imageUrl: string;
+      extraImages: string[];
+    },
+    slug: string
+  ) {
+    const dbArtwork = await this.artworksRepository.getBySlug(slug);
+    if (!dbArtwork) {
+      throw new AppError("No se encontró la obra");
+    }
+
+    const payload: NewArtwork = {
+      ...data,
+      imageUrl: images.imageUrl,
+      slug,
+      price: data.price.toString(),
+    };
+    const artwork = await this.artworksRepository.update(payload, slug);
+    if (dbArtwork.images.length) {
+      await this.artworksImagesRepository.deleteByArtworkId(artwork.id);
+    }
+    if (images.extraImages.length) {
+      await this.insertArtworkExtraImages(images.extraImages, artwork.id);
+    }
+    return artwork;
+  }
+
   async insertArtworkExtraImages(images: string[] | string, artworkId: string) {
     await this.artworksImagesRepository.insert(images, artworkId);
   }

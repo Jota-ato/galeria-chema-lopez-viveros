@@ -1,6 +1,6 @@
 "use client";
 
-import { Artwork, ArtworkRatio } from "../types/artworks.types";
+import { ArtworkRatio, ArtworkWithImages } from "../types/artworks.types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { artworkSchema, ArtworkInput } from "../schema/artwork-schema";
@@ -60,7 +60,12 @@ const dimensionsData: FieldInput<ArtworkInput>[] = [
   },
 ];
 
-export function ArtworkForm() {
+export function ArtworkForm({
+  artwork
+}: {
+  artwork?: ArtworkWithImages
+}) {
+  const isEditing = !!artwork;
   const { setBasicInfo, setConfirmationDialogOpen, basicInfo } =
     useArtworkStore();
 
@@ -143,8 +148,8 @@ export function ArtworkForm() {
         </FieldGroup>
         <FormSubmit
           isSubmitting={isSubmitting}
-          isSubmittingLabel="Publicando obra..."
-          label="Publicar obra"
+          isSubmittingLabel={isEditing ? "Guardando..." : "Publicando..."}
+          label={isEditing ? "Guardar obra" : "Publicar obra"}
         />
       </FieldSet>
     </form>
