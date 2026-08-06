@@ -18,6 +18,8 @@ export function ArtworkPanel({ artwork }: { artwork?: ArtworkWithImages }) {
 
   useEffect(() => {
     if (artwork) {
+      if (!artwork) return;
+
       setBasicInfo({
         ...artwork,
         price: Number(artwork.price) ?? 0,

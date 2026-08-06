@@ -42,7 +42,7 @@ export default async function EditArtworkPage({
           Editar obra: {artwork.title}
         </Heading>
       </header>
-      <ArtworkPanel artwork={artwork} />
+      <ArtworkPanel key={artwork.id} artwork={artwork} />
     </>
   );
 }

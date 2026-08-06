@@ -60,11 +60,7 @@ const dimensionsData: FieldInput<ArtworkInput>[] = [
   },
 ];
 
-export function ArtworkForm({
-  artwork
-}: {
-  artwork?: ArtworkWithImages
-}) {
+export function ArtworkForm({ artwork }: { artwork?: ArtworkWithImages }) {
   const isEditing = !!artwork;
   const { setBasicInfo, setConfirmationDialogOpen, basicInfo } =
     useArtworkStore();
@@ -75,15 +71,21 @@ export function ArtworkForm({
     control,
     setValue,
     watch,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ArtworkInput>({
     resolver: zodResolver(artworkSchema),
     defaultValues: {
       status: "on_sale",
       aspectRatio: "square",
-      ...basicInfo,
     },
   });
+
+  useEffect(() => {
+    if (basicInfo) {
+      reset(basicInfo);
+    }
+  }, [basicInfo, reset]);
 
   const width = watch("width");
   const height = watch("height");
