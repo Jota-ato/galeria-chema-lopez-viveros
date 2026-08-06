@@ -86,7 +86,7 @@ export default async function ArtworkPage({
 
   return (
     <Container className="space-y-4">
-      <section className="flex flex-col md:flex-row gap-6 md:gap-8">
+      <section className="flex flex-col lg:flex-row gap-6 md:gap-8">
         <div>
           {artwork.images.length ? (
             <ImagesCarousel artwork={artwork} />

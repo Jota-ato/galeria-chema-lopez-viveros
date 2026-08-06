@@ -15,7 +15,7 @@ export function ArtworkImage({
       height={800}
       priority
       loading="eager"
-      className="rounded-lg max-w-3xl!"
+      className="rounded-lg max-w-full! sm:max-w-3xl!"
     />
   );
 }

@@ -26,7 +26,7 @@ export function ImagesCarousel({ artwork }: { artwork: ArtworkWithImages }) {
         </CarouselItem>
         {artwork.images.map((image) => (
           <CarouselItem
-            className="max-h-60 md:max-h-120 overflow-auto [&>img]:h-full"
+            className=" overflow-auto [&>img]:h-full"
             key={image.id}
           >
             <ArtworkImage ratio={ratio} image={image.imageUrl} />
