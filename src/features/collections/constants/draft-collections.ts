@@ -5,7 +5,7 @@ export const collections: Collection[] = [
     id: "1",
     name: "Gatos",
     slug: "gatos",
-    description: "Colección de obras de gatos",
+    description: "Colección de retratos felinos en distintas técnicas y estilos",
     banner: "https://picsum.photos/seed/gatos/800/450",
     status: "published",
     createdAt: new Date("2026-06-02"),
