@@ -1,10 +1,8 @@
 "use client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CollectionInput,
-  collectionSchema,
-} from "@/features/collections/schemas/collection-schema";
+
+import { useMemo } from "react";
+import { Upload, X } from "lucide-react";
+import Image from "next/image";
 import {
   Field,
   FieldDescription,
@@ -12,61 +10,95 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/shared/components/ui/field";
-import { Input } from "@/shared/components/ui/input";
-import { Textarea } from "@/shared/components/ui/textarea";
 import { CustomSelect } from "@/shared/components/form/custom-select";
 import { collectionStatus } from "@/db/schema";
 import {
   STATUS_DESCRIPTION,
   TRANSLATED_COLLECTION_STATUS,
 } from "../helpers/status";
-import { Upload, X } from "lucide-react";
-import { useEffect, useMemo } from "react";
-import { generateSlug } from "@/shared/lib/slug";
 import { useArtworkImageUpload } from "@/features/artworks/hooks/use-artwork-image-upload";
 import { UploadTile } from "@/features/artworks/components/upload-tile";
-import Image from "next/image";
 import { Button } from "@/shared/components/ui/button";
 import { FieldWLabel } from "@/shared/components/form/field-w-label";
 import { FormSubmit } from "@/shared/components/form/form-submit";
+import { useCollectionForm } from "../hooks/useCollectionForm";
 
-export function CollectionForm() {
-  const {
-    handleSubmit,
-    register,
-    control,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<CollectionInput>({
-    resolver: zodResolver(collectionSchema),
-    defaultValues: {
-      status: "draft",
+interface BannerFieldProps {
+  value?: string;
+  onChange: (value?: string) => void;
+}
+
+function BannerField({ value, onChange }: BannerFieldProps) {
+  const { startUpload, isUploading } = useArtworkImageUpload({
+    logLabel: "banner",
+    onSuccess: ([url]) => {
+      if (url) onChange(url);
     },
   });
 
-  const status = watch("status");
-  const name = watch("name");
-  const banner = watch("banner");
+  return (
+    <UploadTile
+      id="banner"
+      isUploading={isUploading}
+      label="Imagen de banner"
+      multiple={false}
+      variant="compact"
+      onFilesSelected={([file]) => file && startUpload([file])}
+      className="w-full"
+    >
+      {value ? (
+        <div className="relative h-full w-full">
+          <Image
+            src={value}
+            alt="Banner de la colección"
+            fill
+            className="object-cover"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="absolute top-2 right-2 z-10"
+            onClick={(e) => {
+              e.stopPropagation();
+              onChange(undefined);
+            }}
+          >
+            <X className="size-4" />
+          </Button>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center gap-2">
+          <Upload className="size-4" />
+          <p className="text-sm">Subir imagen de banner</p>
+        </div>
+      )}
+    </UploadTile>
+  );
+}
 
-  const slug = useMemo(() => {
-    if (!name) return "";
-    const slug = generateSlug(name);
-    setValue("slug", slug);
-    return slug;
-  }, [name, setValue]);
+export function CollectionForm() {
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    errors,
+    isSubmitting,
+    status,
+    banner,
+    slugPreview,
+    onSubmit,
+  } = useCollectionForm();
 
-  const onSubmit = async (data: CollectionInput) => {
-    console.log("Submitting collection:", data);
-  };
-
-  const { startUpload: startBannerUpload, isUploading: isBannerUploading } =
-    useArtworkImageUpload({
-      logLabel: "banner",
-      onSuccess: ([url]) => {
-        if (url) setValue("banner", url);
-      },
-    });
+  const statusOptions = useMemo(
+    () =>
+      collectionStatus.enumValues.map((s) => ({
+        label: TRANSLATED_COLLECTION_STATUS[s],
+        value: s,
+      })),
+    [],
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,6 +110,7 @@ export function CollectionForm() {
             name="name"
             error={errors.name?.message}
           />
+
           <Field>
             <FieldLabel>Slug</FieldLabel>
             <FieldDescription>
@@ -85,11 +118,11 @@ export function CollectionForm() {
               automáticamente a partir del nombre.
             </FieldDescription>
             <div className="bg-muted text-muted-foreground p-1 px-2 rounded-md border border-border">
-              {slug
-                ? slug
-                : "El slug se generará automáticamente a partir del nombre de la colección."}
+              {slugPreview ||
+                "El slug se generará automáticamente a partir del nombre de la colección."}
             </div>
           </Field>
+
           <FieldWLabel
             label="Descripción"
             register={register}
@@ -105,49 +138,16 @@ export function CollectionForm() {
               placeholder="Selecciona un estado"
               name="status"
               description={STATUS_DESCRIPTION[status]}
-              options={collectionStatus.enumValues.map((status) => ({
-                label: TRANSLATED_COLLECTION_STATUS[status],
-                value: status,
-              }))}
+              options={statusOptions}
             />
-            <UploadTile
-              id="banner"
-              isUploading={isBannerUploading}
-              label="Imagen de banner"
-              multiple={false}
-              variant="compact"
-              onFilesSelected={([file]) => file && startBannerUpload([file])}
-              className="w-full"
-            >
-              {banner ? (
-                <div className="relative h-full w-full">
-                  <Image
-                    src={banner}
-                    alt="Banner de la colección"
-                    fill
-                    className="object-cover"
-                  />
-                  <Button
-                    variant="outline"
-                    size={"icon"}
-                    className="absolute top-2 right-2 z-10"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setValue("banner", undefined);
-                    }}
-                  >
-                    <X className="size-4" />
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-2">
-                  <Upload className="size-4" />
-                  <p className="text-sm">Subir imagen de banner</p>
-                </div>
-              )}
-            </UploadTile>
+
+            <BannerField
+              value={banner}
+              onChange={(url) => setValue("banner", url)}
+            />
           </div>
         </FieldGroup>
+
         <FormSubmit
           isSubmitting={isSubmitting}
           isSubmittingLabel="Creando..."
