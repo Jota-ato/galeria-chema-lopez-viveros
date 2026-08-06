@@ -1,17 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ComponentType, useCallback, useEffect, useRef, useState } from "react";
 import { ArtworkBentoAlbum } from "./artwork-bento-album";
 import { Artwork } from "../types/artworks.types";
 import { getMoreArtworks } from "../actions/get-more-art-works";
+import { ArtworkWrapperProps } from "@/features/collections/components/artwork-wrapper";
 
 const LIMIT = 5;
 
-interface Props {
+export function ArtworkInfiniteScroll({
+  initialArtworks,
+  artworkWrapper,
+  isSelected,
+  onToggleSelect,
+}: {
   initialArtworks: Artwork[];
-}
-
-export function ArtworkInfiniteScroll({ initialArtworks }: Props) {
+  artworkWrapper?: ComponentType<ArtworkWrapperProps>;
+  isSelected?: (artwork: Artwork) => boolean;
+  onToggleSelect?: (artwork: Artwork) => void;
+}) {
   const [artworks, setArtworks] = useState(initialArtworks);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(initialArtworks.length === LIMIT);
@@ -48,7 +55,12 @@ export function ArtworkInfiniteScroll({ initialArtworks }: Props) {
 
   return (
     <>
-      <ArtworkBentoAlbum artworks={artworks} />
+      <ArtworkBentoAlbum
+        artworks={artworks}
+        artworkWrapper={artworkWrapper}
+        isSelected={isSelected}
+        onToggleSelect={onToggleSelect}
+      />
 
       <div ref={sentinelRef} className="h-10" />
 

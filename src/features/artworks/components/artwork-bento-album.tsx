@@ -6,6 +6,8 @@ import "react-photo-album/rows.css";
 import { Plus } from "lucide-react";
 import { Artwork } from "../types/artworks.types";
 import { RATIO_MAP } from "@/shared/utils/aspect-ration";
+import { ComponentType } from "react";
+import { ArtworkWrapperProps } from "@/features/collections/components/artwork-wrapper";
 
 interface ArtworkBentoAlbumProps {
   artworks: Artwork[];
@@ -13,9 +15,21 @@ interface ArtworkBentoAlbumProps {
   targetRowHeight?: number;
   spacing?: number;
   admin?: boolean;
+  /** Componente que envuelve cada card. Debe cumplir ArtworkWrapperProps. */
+  artworkWrapper?: ComponentType<ArtworkWrapperProps>;
+  /** Si se define, el wrapper recibe `selected` por artwork. */
+  isSelected?: (artwork: Artwork) => boolean;
+  /** Si se define, el wrapper recibe `onToggle` por artwork. */
+  onToggleSelect?: (artwork: Artwork) => void;
 }
 
 const ADD_CARD_RATIO = 1;
+
+// Wrapper por defecto: exactamente el <div> que había antes.
+// Si no se pasa `artworkWrapper`, el comportamiento es idéntico al original.
+function DefaultArtworkWrapper({ children, style }: ArtworkWrapperProps) {
+  return <div style={style}>{children}</div>;
+}
 
 export function ArtworkBentoAlbum({
   artworks,
@@ -23,7 +37,12 @@ export function ArtworkBentoAlbum({
   targetRowHeight = 280,
   spacing = 12,
   admin = false,
+  artworkWrapper,
+  isSelected,
+  onToggleSelect,
 }: ArtworkBentoAlbumProps) {
+  const Wrapper = artworkWrapper ?? DefaultArtworkWrapper;
+
   const artworkPhotos = artworks.map((artwork) => {
     const ratio = RATIO_MAP[artwork.aspectRatio];
     return {
@@ -74,9 +93,13 @@ export function ArtworkBentoAlbum({
 
           const { artwork } = photo;
           return (
-            <div
+            <Wrapper
               key={artwork.id}
               style={{ width, height, position: "relative" }}
+              selected={isSelected?.(artwork)}
+              onToggle={
+                onToggleSelect ? () => onToggleSelect(artwork) : undefined
+              }
             >
               <BentoCard
                 href={hrefFor(artwork)}
@@ -91,7 +114,7 @@ export function ArtworkBentoAlbum({
                 }
                 cta="Ver obra"
               />
-            </div>
+            </Wrapper>
           );
         },
       }}

@@ -2,26 +2,63 @@
 
 import { useCollectionStore } from "../stores/collection-store";
 import { CollectionFormCard } from "./collection-form-card";
+import { AnimatePresence, motion } from "motion/react";
 import {
-    AnimatePresence,
-    motion
-} from "motion/react"
+  Progress,
+  ProgressIndicator,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressValue,
+} from "@/shared/components/ui/progress";
+import { Artwork } from "@/features/artworks/types/artworks.types";
+import { ArtworkInfiniteScroll } from "@/features/artworks/components/artworks-infinite-scroll";
+import { ArtworkWrapper } from "./artwork-wrapper";
 
-export function CreateCollection() {
-  const { step, data, setStep } = useCollectionStore();
+export function CreateCollection({
+  initialArtworks,
+}: {
+  initialArtworks: Artwork[];
+}) {
+  const { step, data, setStep, imagesUrl, addImageUrl, removeImageUrl } =
+    useCollectionStore();
 
-    if (step !== 1 && data === null) {
-        setStep(1);
-    }
+  if (step !== 1 && data === null) {
+    setStep(1);
+  }
 
   return (
     <AnimatePresence>
+      <div key="header" className="bg-card p-4 rounded-md">
+        <Progress value={((step - 1) / 2) * 100}>
+          <ProgressLabel>Paso {step} de 2</ProgressLabel>
+          <ProgressValue />
+        </Progress>
+      </div>
       {step === 1 && (
         <motion.div
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
         >
-            <CollectionFormCard />
+          <CollectionFormCard />
+        </motion.div>
+      )}
+      {step === 2 && (
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, ease: "easeIn" }}
+          className="p-4 bg-card rounded-md"
+        >
+          <ArtworkInfiniteScroll
+            initialArtworks={initialArtworks}
+            artworkWrapper={ArtworkWrapper}
+            isSelected={(artwork) => imagesUrl.includes(artwork.imageUrl)}
+            onToggleSelect={(artwork) =>
+              imagesUrl.includes(artwork.imageUrl)
+                ? removeImageUrl(artwork.imageUrl)
+                : addImageUrl(artwork.imageUrl)
+            }
+          />
         </motion.div>
       )}
     </AnimatePresence>
