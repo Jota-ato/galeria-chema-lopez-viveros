@@ -7,6 +7,8 @@ import {
 } from "@/features/collections/schemas/collection-schema";
 import { generateSlug } from "@/shared/lib/slug";
 import { useCollectionStore } from "../stores/collection-store";
+import { showResponse } from "@/shared/lib/client-actions";
+import { createCollectionAction } from "../actions/collections-actions";
 
 export function useCollectionForm() {
   const {
@@ -38,7 +40,12 @@ export function useCollectionForm() {
   }, [name]);
 
   const onSubmit = async (data: CollectionInput) => {
-    setData(data);
+
+    const response = showResponse(await createCollectionAction(data))
+
+    if (!response || !response.sucess) return
+    
+    setData(response.data);
     setStep(2);
   };
 
