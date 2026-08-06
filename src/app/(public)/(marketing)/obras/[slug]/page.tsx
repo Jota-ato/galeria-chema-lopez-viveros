@@ -14,6 +14,7 @@ import { generateWhatsappMessageLink } from "@/shared/utils/whatsapp";
 import { ExternalLink, MessageCircle, PenSquareIcon } from "lucide-react";
 import Link from "next/link";
 import { getCachedArtwork } from "@/shared/lib/cache";
+import { TRANSLATE_STATUS_MAP } from "@/features/artworks/utils/status";
 
 export async function generateMetadata({
   params,
@@ -117,7 +118,7 @@ export default async function ArtworkPage({
                   artwork.status === "exhibition_only" ? "outline" : "default"
                 }
               >
-                {artwork.status === "on_sale" ? "Disponible" : "Consultar"}
+                {TRANSLATE_STATUS_MAP[artwork.status]}
               </Badge>
             </p>
           </div>
