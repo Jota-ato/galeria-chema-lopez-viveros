@@ -10,6 +10,7 @@ import {
 } from "@/shared/components/ui/progress";
 import { ArtworkWithImages } from "@/features/artworks/types/artworks.types";
 import { AddImages } from "./add-artworks";
+import { redirect } from "next/navigation";
 
 export function CreateCollection({
   initialArtworks,
@@ -22,11 +23,17 @@ export function CreateCollection({
     setStep(1);
   }
 
+  const value = step === 3 ? 100 : ((step - 1) / 2) * 100;
+
+  if (step === 3) {
+    redirect("/dashboard/colecciones");
+  }
+
   return (
     <AnimatePresence>
       <div key="header" className="bg-card p-4 rounded-md">
-        <Progress value={((step - 1) / 2) * 100}>
-          <ProgressLabel>Paso {step} de 2</ProgressLabel>
+        <Progress value={value}>
+          <ProgressLabel>Paso {step === 3 ? 2 : step} de 2</ProgressLabel>
           <ProgressValue />
         </Progress>
       </div>
