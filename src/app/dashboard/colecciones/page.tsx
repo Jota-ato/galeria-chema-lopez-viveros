@@ -3,7 +3,6 @@ import { Heading } from "@/shared/components/typography/heading";
 import { Button } from "@/shared/components/ui/button";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
-import { collections } from "@/features/collections/constants/draft-collections";
 import { SearchBar } from "@/shared/components/ui/search-bar";
 import { requireAuth } from "@/lib/auth-server";
 import { redirect } from "next/navigation";

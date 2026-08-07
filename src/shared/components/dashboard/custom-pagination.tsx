@@ -10,6 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/shared/components/ui/pagination";
+import { cn } from "@/shared/lib/utils";
 
 interface CustomPaginationProps {
   limit: number;
@@ -95,7 +96,7 @@ export function CustomPagination({
             </PaginationItem>
           ) : (
             <PaginationItem key={p}>
-              <PaginationLink href={buildHref(p)} isActive={p === page}>
+              <PaginationLink href={buildHref(p)} isActive={p === Number(page)}>
                 {p}
               </PaginationLink>
             </PaginationItem>
