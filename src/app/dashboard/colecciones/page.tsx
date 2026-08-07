@@ -4,6 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { collections } from "@/features/collections/constants/draft-collections";
+import { SearchBar } from "@/shared/components/ui/search-bar";
 
 export default async function CollectionsPage() {
   return (
@@ -26,13 +27,7 @@ export default async function CollectionsPage() {
         </div>
       </header>
       <div className="mt-4 flex gap-4 items-center">
-        <div className="bg-popover text-popover-foreground px-2 py-1 flex-1 rounded-md border border-popover-foreground flex items-center gap-2">
-          <Search className="size-4" />
-          <input
-            placeholder="Buscar colección..."
-            className="flex-1 focus:outline-none"
-          />
-        </div>
+        <SearchBar />
         <div>
           <select>
             <option>Todas</option>
