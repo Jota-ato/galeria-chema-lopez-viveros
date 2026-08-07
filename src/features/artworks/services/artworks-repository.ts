@@ -11,6 +11,7 @@ import { eq } from "drizzle-orm";
 export interface IArtworksRepository {
   getLatest(limit: number, page: number): Promise<Artwork[]>;
   getBySlug(slug: string): Promise<ArtworkWithImages | null>;
+  getById(id: string): Promise<ArtworkWithImages | null>;
   insert(data: NewArtwork): Promise<Artwork>;
   update(data: UpdatedArtwork, slug: string): Promise<Artwork>;
   search(query: string): Promise<ArtworkWithImages[]>;
@@ -36,6 +37,17 @@ class ArtworksRepository implements IArtworksRepository {
     );
   }
 
+  async getById(id: string): Promise<ArtworkWithImages | null> {
+    return (
+      (await db.query.artworks.findFirst({
+        where: { id },
+        with: {
+          images: true,
+        },
+      })) || null
+    );
+  }
+
   async insert(data: NewArtwork): Promise<Artwork> {
     return (await db.insert(artworks).values(data).returning())[0];
   }
@@ -53,13 +65,13 @@ class ArtworksRepository implements IArtworksRepository {
   async search(query: string): Promise<ArtworkWithImages[]> {
     return await db.query.artworks.findMany({
       where: {
-        title: {ilike: `%${query}%`},
+        title: { ilike: `%${query}%` },
       },
       with: {
-        images: true
+        images: true,
       },
-      limit: 10
-    })
+      limit: 10,
+    });
   }
 }
 

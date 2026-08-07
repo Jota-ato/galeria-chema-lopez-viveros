@@ -38,7 +38,9 @@ export function CreateCollection({
           <CollectionFormCard />
         </motion.div>
       )}
-      {step === 2 && <AddImages initialArtworks={initialArtworks} />}
+      {step === 2 && data && (
+        <AddImages collectionId={data.id} initialArtworks={initialArtworks} />
+      )}
     </AnimatePresence>
   );
 }

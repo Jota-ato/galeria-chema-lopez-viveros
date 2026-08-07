@@ -1,18 +1,19 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { CollectionInput } from "../schemas/collection-schema";
+import { Artwork } from "@/features/artworks/types/artworks.types";
+import { Collection } from "../types/collections.types";
 
 export interface CollectionStore {
   collectionId: string | null;
-  data: CollectionInput | null;
-  imagesUrl: string[];
+  data: Collection | null;
+  artworks: Artwork[];
   step: number;
   setStep: (step: number) => void;
   setCollectionId: (id: string | null) => void;
-  setData: (data: CollectionInput | null) => void;
-  setImagesUrl: (imagesUrl: string[]) => void;
-  addImageUrl: (imageUrl: string) => void;
-  removeImageUrl: (imageUrl: string) => void;
+  setData: (data: Collection | null) => void;
+  setArtworks: (artworks: Artwork[]) => void;
+  addArtwork: (artwork: Artwork) => void;
+  removeArtwork: (artworkId: string) => void;
   reset: () => void;
 }
 
@@ -21,27 +22,29 @@ export const useCollectionStore = create<CollectionStore>()(
     (set) => ({
       collectionId: null,
       data: null,
-      imagesUrl: [],
+      artworks: [],
       step: 1,
       setStep: (step) => set({ step }),
       setCollectionId: (id) => set({ collectionId: id }),
       setData: (data) => set({ data }),
-      setImagesUrl: (imagesUrl) => set({ imagesUrl }),
-      addImageUrl: (imageUrl) =>
-        set((state) => ({ imagesUrl: [...state.imagesUrl, imageUrl] })),
-      removeImageUrl: (imageUrl) =>
+      setArtworks: (artworks) => set({ artworks }),
+      addArtwork: (artwork) =>
+        set((state) => ({ artworks: [...state.artworks, artwork] })),
+      removeArtwork: (artworkId) =>
         set((state) => ({
-          imagesUrl: state.imagesUrl.filter((url) => url !== imageUrl),
+          artworks: state.artworks.filter(
+            (artwork) => artwork.id !== artworkId,
+          ),
         })),
-      reset: () => set({ collectionId: null, data: null, imagesUrl: [] }),
+      reset: () => set({ collectionId: null, data: null, artworks: [] }),
     }),
     {
-      name: "artwork-store",
+      name: "collection-store",
       storage: createJSONStorage(() => localStorage),
 
       partialize: (state) => ({
         data: state.data,
-        imagesUrl: state.imagesUrl,
+        artworks: state.artworks,
         collectionId: state.collectionId,
         step: state.step,
       }),
