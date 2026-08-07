@@ -13,6 +13,7 @@ export interface IArtworksRepository {
   getBySlug(slug: string): Promise<ArtworkWithImages | null>;
   insert(data: NewArtwork): Promise<Artwork>;
   update(data: UpdatedArtwork, slug: string): Promise<Artwork>;
+  search(query: string): Promise<ArtworkWithImages[]>;
 }
 
 class ArtworksRepository implements IArtworksRepository {
@@ -47,6 +48,18 @@ class ArtworksRepository implements IArtworksRepository {
         .where(eq(artworks.slug, slug))
         .returning()
     )[0];
+  }
+
+  async search(query: string): Promise<ArtworkWithImages[]> {
+    return await db.query.artworks.findMany({
+      where: {
+        title: {ilike: `%${query}%`},
+      },
+      with: {
+        images: true
+      },
+      limit: 10
+    })
   }
 }
 

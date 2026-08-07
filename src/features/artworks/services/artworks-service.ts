@@ -55,7 +55,7 @@ class ArworksService {
       imageUrl: string;
       extraImages: string[];
     },
-    slug: string
+    slug: string,
   ) {
     const dbArtwork = await this.artworksRepository.getBySlug(slug);
     if (!dbArtwork) {
@@ -80,6 +80,13 @@ class ArworksService {
 
   async insertArtworkExtraImages(images: string[] | string, artworkId: string) {
     await this.artworksImagesRepository.insert(images, artworkId);
+  }
+
+  async searchArtworks(query: string) {
+    if (!query.trim()) {
+      return [];
+    }
+    return await this.artworksRepository.search(query);
   }
 }
 

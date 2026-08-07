@@ -9,7 +9,7 @@ import {
   ProgressValue,
 } from "@/shared/components/ui/progress";
 import { ArtworkWithImages } from "@/features/artworks/types/artworks.types";
-import { AddImages } from "./add-images";
+import { AddImages } from "./add-artworks";
 
 export function CreateCollection({
   initialArtworks,
