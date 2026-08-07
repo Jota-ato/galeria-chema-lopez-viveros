@@ -5,7 +5,7 @@ import { SaveIcon } from "lucide-react";
 import { SearchBar } from "@/shared/components/ui/search-bar";
 import { ArtworkInfiniteScroll } from "@/features/artworks/components/artworks-infinite-scroll";
 import { motion } from "motion/react";
-import { ArtworkWithImages } from "@/features/artworks/types/artworks.types";
+import { Artwork } from "@/features/artworks/types/artworks.types";
 import { useCollectionStore } from "../stores/collection-store";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -19,12 +19,12 @@ export function AddImages({
   initialArtworks,
   collectionId,
 }: {
-  initialArtworks: ArtworkWithImages[];
+  initialArtworks: Artwork[];
   collectionId: string;
 }) {
   const { setStep, artworks, addArtwork, removeArtwork } = useCollectionStore();
 
-  const [searchedArtworks, setSearchedArtworks] = useState<ArtworkWithImages[]>(
+  const [searchedArtworks, setSearchedArtworks] = useState<Artwork[]>(
     [],
   );
   const [query, setQuery] = useState("");

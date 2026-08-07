@@ -8,14 +8,14 @@ import {
   ProgressLabel,
   ProgressValue,
 } from "@/shared/components/ui/progress";
-import { ArtworkWithImages } from "@/features/artworks/types/artworks.types";
+import { Artwork } from "@/features/artworks/types/artworks.types";
 import { AddImages } from "./add-artworks";
 import { redirect } from "next/navigation";
 
 export function CreateCollection({
   initialArtworks,
 }: {
-  initialArtworks: ArtworkWithImages[];
+  initialArtworks: Artwork[];
 }) {
   const { step, data, setStep } = useCollectionStore();
 
