@@ -5,8 +5,30 @@ import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { collections } from "@/features/collections/constants/draft-collections";
 import { SearchBar } from "@/shared/components/ui/search-bar";
+import { requireAuth } from "@/lib/auth-server";
+import { redirect } from "next/navigation";
+import { collectionsService } from "@/features/collections/services/collections-service";
 
-export default async function CollectionsPage() {
+const LIMIT = 10;
+
+export default async function CollectionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: number }>;
+}) {
+  const { session } = await requireAuth();
+
+  if (!session) {
+    redirect("/auth/sign-in");
+  }
+
+  const { page } = await searchParams;
+
+  const { collections, total } = await collectionsService.getAllCollections(
+    LIMIT,
+    page ?? 1,
+  );
+
   return (
     <>
       <header className="flex gap-6">
@@ -37,7 +59,12 @@ export default async function CollectionsPage() {
           </select>
         </div>
       </div>
-      <CollectionsTable collections={collections} />
+      <CollectionsTable
+        limit={LIMIT}
+        page={page ?? 1}
+        collections={collections}
+        total={total}
+      />
     </>
   );
 }

@@ -16,7 +16,7 @@ export default async function DashboardLayout({
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <main className="flex-1 py-8 md:py-12">
+      <main className="flex-1 py-8 md:py-12 max-w-full overflow-auto">
         <Container className="space-y-4">{children}</Container>
       </main>
     </SidebarProvider>

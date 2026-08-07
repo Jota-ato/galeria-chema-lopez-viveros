@@ -5,16 +5,24 @@ import {
   TableHead,
   TableBody,
   TableCell,
+  TableFooter
 } from "@/shared/components/ui/table";
-import { Collection } from "../types/collections.types";
+import { CollectionWithArtworksCount } from "../types/collections.types";
 import { formatDate } from "@/shared/utils/date";
 import { Button } from "@/shared/components/ui/button";
 import { PenSquareIcon, Trash2Icon } from "lucide-react";
+import { CustomPagination } from "@/shared/components/dashboard/custom-pagination";
 
 export default function CollectionsTable({
   collections,
+  limit,
+  page,
+  total
 }: {
-  collections: Collection[];
+  collections: CollectionWithArtworksCount[];
+  limit: number
+  page: number
+  total: number
 }) {
   return (
     <Table>
@@ -31,7 +39,7 @@ export default function CollectionsTable({
         {collections.map((collection) => (
           <TableRow key={collection.id}>
             <TableCell>{collection.name}</TableCell>
-            <TableCell>10</TableCell>
+            <TableCell>{collection.artworksCount}</TableCell>
             <TableCell>{collection.status}</TableCell>
             <TableCell>{formatDate(collection.updatedAt)}</TableCell>
             <TableCell className="flex gap-2">
@@ -45,6 +53,13 @@ export default function CollectionsTable({
           </TableRow>
         ))}
       </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={5}>
+            <CustomPagination total={total} limit={limit} page={page} />
+          </TableCell>
+        </TableRow>
+      </TableFooter>
     </Table>
   );
 }

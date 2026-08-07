@@ -4,7 +4,10 @@ import {
   collectionRepository,
   IColectionRepository,
 } from "./collections-repository";
-import { Collection } from "../types/collections.types";
+import {
+  Collection,
+  CollectionWithArtworksCount,
+} from "../types/collections.types";
 import {
   artworksRepository,
   IArtworksRepository,
@@ -64,6 +67,22 @@ class CollectionsService {
     );
 
     return updatedArtworks;
+  }
+
+  async getAllCollections(
+    limit: number,
+    page: number,
+  ): Promise<{
+    total: number;
+    collections: CollectionWithArtworksCount[];
+  }> {
+    if (limit <= 0 || page <= 0) {
+      throw new AppError("El límite y la página deben ser mayores a 0");
+    }
+    return {
+      total: await this.collectionRepository.getTotalCount(),
+      collections: await this.collectionRepository.getAll(limit, page),
+    };
   }
 }
 
