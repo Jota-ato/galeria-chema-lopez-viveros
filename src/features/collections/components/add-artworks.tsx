@@ -14,6 +14,7 @@ import { ArtworkBentoAlbum } from "@/features/artworks/components/artwork-bento-
 import { showResponse } from "@/shared/lib/client-actions";
 import { addArtworksToCollectionAction } from "../actions/collections-actions";
 import { Spinner } from "@/shared/components/ui/spinner";
+import { useRouter } from "next/router";
 
 export function AddImages({
   initialArtworks,
@@ -23,10 +24,8 @@ export function AddImages({
   collectionId: string;
 }) {
   const { setStep, artworks, addArtwork, removeArtwork } = useCollectionStore();
-
-  const [searchedArtworks, setSearchedArtworks] = useState<Artwork[]>(
-    [],
-  );
+  const router = useRouter();
+  const [searchedArtworks, setSearchedArtworks] = useState<Artwork[]>([]);
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebounce(query, 300);
   const [isAdding, setIsAdding] = useState(false);
@@ -64,7 +63,8 @@ export function AddImages({
             );
 
             setIsAdding(false);
-            setStep(3)
+            setStep(3);
+            router.push("/dashboard/colecciones");
           }}
         >
           {isAdding ? (

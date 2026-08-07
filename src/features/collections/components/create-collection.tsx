@@ -17,7 +17,7 @@ export function CreateCollection({
 }: {
   initialArtworks: Artwork[];
 }) {
-  const { step, data, setStep } = useCollectionStore();
+  const { step, data, setStep, reset } = useCollectionStore();
 
   if (step !== 1 && data === null) {
     setStep(1);
@@ -26,7 +26,7 @@ export function CreateCollection({
   const value = step === 3 ? 100 : ((step - 1) / 2) * 100;
 
   if (step === 3) {
-    redirect("/dashboard/colecciones");
+    reset()
   }
 
   return (
