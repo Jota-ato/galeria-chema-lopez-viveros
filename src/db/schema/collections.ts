@@ -18,7 +18,7 @@ export const collections = pgTable("collection", {
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   description: text("description").notNull(),
-  status: collectionStatus(),
+  status: collectionStatus().notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()

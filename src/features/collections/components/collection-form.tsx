@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Upload, X } from "lucide-react";
 import Image from "next/image";
 import {
@@ -22,10 +22,11 @@ import { Button } from "@/shared/components/ui/button";
 import { FieldWLabel } from "@/shared/components/form/field-w-label";
 import { FormSubmit } from "@/shared/components/form/form-submit";
 import { useCollectionForm } from "../hooks/useCollectionForm";
+import { useCollectionStore } from "../stores/collection-store";
 
 interface BannerFieldProps {
-  value?: string;
-  onChange: (value?: string) => void;
+  value?: string | null;
+  onChange: (value?: string | null) => void;
 }
 
 function BannerField({ value, onChange }: BannerFieldProps) {
@@ -77,7 +78,11 @@ function BannerField({ value, onChange }: BannerFieldProps) {
   );
 }
 
-export function CollectionForm() {
+export function CollectionForm({
+  isEditting = false,
+}: {
+  isEditting?: boolean;
+}) {
   const {
     register,
     control,
@@ -89,7 +94,18 @@ export function CollectionForm() {
     banner,
     slugPreview,
     onSubmit,
+    reset,
   } = useCollectionForm();
+
+  const { data } = useCollectionStore();
+
+  useEffect(() => {
+    if (data) {
+      reset({
+        ...data
+      })
+    };
+  }, [data, reset]);
 
   const statusOptions = useMemo(
     () =>

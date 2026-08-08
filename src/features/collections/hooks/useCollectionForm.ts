@@ -16,6 +16,7 @@ export function useCollectionForm() {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CollectionInput>({
     resolver: zodResolver(collectionSchema),
@@ -60,5 +61,6 @@ export function useCollectionForm() {
     banner,
     slugPreview,
     onSubmit,
+    reset,
   };
 }

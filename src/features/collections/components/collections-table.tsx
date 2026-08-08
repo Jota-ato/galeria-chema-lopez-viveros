@@ -5,7 +5,7 @@ import {
   TableHead,
   TableBody,
   TableCell,
-  TableFooter
+  TableFooter,
 } from "@/shared/components/ui/table";
 import { CollectionWithArtworksCount } from "../types/collections.types";
 import { formatDate } from "@/shared/utils/date";
@@ -17,12 +17,12 @@ export default function CollectionsTable({
   collections,
   limit,
   page,
-  total
+  total,
 }: {
   collections: CollectionWithArtworksCount[];
-  limit: number
-  page: number
-  total: number
+  limit: number;
+  page: number;
+  total: number;
 }) {
   return (
     <Table>

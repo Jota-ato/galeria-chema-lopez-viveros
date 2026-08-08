@@ -10,7 +10,7 @@ export const collectionSchema = z.object({
     .string()
     .min(10, "La descripción de la colección es requerida"),
   status: collectionsStatus,
-  banner: z.url().optional(),
+  banner: z.url().optional().nullable(),
 });
 
 export type CollectionInput = z.infer<typeof collectionSchema>;

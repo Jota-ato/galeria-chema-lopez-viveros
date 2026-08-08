@@ -9,15 +9,20 @@ import {
   ProgressValue,
 } from "@/shared/components/ui/progress";
 import { Artwork } from "@/features/artworks/types/artworks.types";
-import { AddImages } from "./add-artworks";
-import { redirect } from "next/navigation";
+import { AddArtworks } from "./add-artworks";
+import { Button } from "@/shared/components/ui/button";
+import { ChevronLeft } from "lucide-react";
+import { FullCollection } from "../types/collections.types";
 
 export function CreateCollection({
   initialArtworks,
+  collection,
 }: {
   initialArtworks: Artwork[];
+  collection?: FullCollection | null;
 }) {
-  const { step, data, setStep, reset } = useCollectionStore();
+  const isEditting = !!collection;
+  const { step, data, setData, setArtworks, setStep, reset } = useCollectionStore();
 
   if (step !== 1 && data === null) {
     setStep(1);
@@ -26,7 +31,12 @@ export function CreateCollection({
   const value = step === 3 ? 100 : ((step - 1) / 2) * 100;
 
   if (step === 3) {
-    reset()
+    reset();
+  }
+
+  if (collection) {
+    setData(collection);
+    setArtworks(collection.artworks ?? []);
   }
 
   return (
@@ -36,17 +46,25 @@ export function CreateCollection({
           <ProgressLabel>Paso {step === 3 ? 2 : step} de 2</ProgressLabel>
           <ProgressValue />
         </Progress>
+        <div className="w-full flex items-center justify-end mt-4">
+          {step === 2 && (
+            <Button variant="outline" onClick={() => setStep(step - 1)}>
+              <ChevronLeft className="size-4" />
+              Regresar
+            </Button>
+          )}
+        </div>
       </div>
       {step === 1 && (
         <motion.div
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
         >
-          <CollectionFormCard />
+          <CollectionFormCard isEditting={isEditting} />
         </motion.div>
       )}
       {step === 2 && data && (
-        <AddImages collectionId={data.id} initialArtworks={initialArtworks} />
+        <AddArtworks collectionId={data.id} initialArtworks={initialArtworks} />
       )}
     </AnimatePresence>
   );

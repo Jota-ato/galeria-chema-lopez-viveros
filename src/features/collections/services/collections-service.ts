@@ -7,6 +7,7 @@ import {
 import {
   Collection,
   CollectionWithArtworksCount,
+  FullCollection,
 } from "../types/collections.types";
 import {
   artworksRepository,
@@ -30,8 +31,10 @@ class CollectionsService {
     return await this.collectionRepository.insert(data);
   }
 
-  async getCollectionBySlug(slug: string): Promise<Collection | null> {
-    return await this.collectionRepository.getBySlug(slug);
+  async getCollectionBySlug(slug: string, full: true): Promise<FullCollection | null>
+  async getCollectionBySlug(slug: string, full?: false): Promise<Collection | null>
+  async getCollectionBySlug(slug: string, full: boolean = false): Promise<Collection | null> {
+    return await this.collectionRepository.getBySlug(slug, full);
   }
 
   async addArtworksToCollection(collectionId: string, artworksIds: string[]) {

@@ -2,6 +2,7 @@ import { db } from "@/db";
 import {
   Collection,
   CollectionWithArtworksCount,
+  FullCollection,
   NewCollection,
 } from "../types/collections.types";
 import { artworks, collections } from "@/db/schema";
@@ -9,7 +10,9 @@ import { count, eq, getColumns } from "drizzle-orm";
 
 export interface IColectionRepository {
   insert: (collection: NewCollection) => Promise<Collection>;
-  getBySlug: (slug: string) => Promise<Collection | null>;
+  getBySlug(slug: string, full: true): Promise<FullCollection | null>;
+  getBySlug(slug: string, full?: false): Promise<Collection | null>;
+  getBySlug(slug: string, full?: boolean): Promise<Collection | null>;
   getById: (id: string) => Promise<Collection | null>;
   getAll: (
     limit: number,
@@ -27,10 +30,17 @@ class CollectionRepository implements IColectionRepository {
     return inserted;
   }
 
-  async getBySlug(slug: string): Promise<Collection | null> {
+  getBySlug(slug: string, full: true): Promise<FullCollection | null>;
+  getBySlug(slug: string, full: false): Promise<Collection | null>;
+  getBySlug(slug: string, full?: boolean): Promise<Collection | null>;
+  async getBySlug(slug: string, full: boolean = false): Promise<Collection | null> {
     return (
       (await db.query.collections.findFirst({
         where: { slug },
+        with: {
+          artworks: full ? true : undefined,
+          categories: full ? true : undefined,
+        }
       })) || null
     );
   }

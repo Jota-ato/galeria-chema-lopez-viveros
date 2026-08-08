@@ -10,7 +10,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/shared/components/ui/pagination";
-import { cn } from "@/shared/lib/utils";
 
 interface CustomPaginationProps {
   limit: number;
@@ -84,7 +83,7 @@ export function CustomPagination({
         <PaginationItem>
           <PaginationPrevious
             text="Anterior"
-            href={buildHref(Math.max((+page - 1), 1))}
+            href={buildHref(Math.max(+page - 1, 1))}
             aria-disabled={isFirst}
             className={isFirst ? "pointer-events-none opacity-50" : undefined}
           />
