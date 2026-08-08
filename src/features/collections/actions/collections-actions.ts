@@ -35,3 +35,31 @@ export const addArtworksToCollectionAction = adminAction(
     return "Obras agregadas exitosamente a la colección";
   },
 );
+
+export const updateCollectionAction = adminAction(
+  async (data: CollectionInput, slug: string) => {
+    const zodResponse = collectionSchema.safeParse(data);
+
+    if (!zodResponse.success) {
+      throw new AppError("Datos inválidos");
+    }
+
+    const collection = await collectionsService.updateCollection(data, slug);
+    return {
+      sucess: true,
+      message: `Colección ${data.name} actualizada exitosamente`,
+      data: collection,
+    };
+  },
+);
+
+export const updateArtworksFromCollectionAction = adminAction(
+  async (collectionId: string, artworksIds: string[]) => {
+    if (!collectionId || !artworksIds.length)
+      throw new AppError("Datos inválidos");
+
+    await collectionsService.updateArtworksFromCollection(collectionId, artworksIds);
+
+    return "Obras actualizadas exitosamente a la colección";
+  },
+);

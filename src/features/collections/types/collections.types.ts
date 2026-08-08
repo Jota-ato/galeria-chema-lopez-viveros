@@ -7,6 +7,7 @@ export type CollectionStatus = (typeof collectionStatus.enumValues)[number];
 export type Collection = typeof collections.$inferSelect
 export type CollectionWithArtworksCount = Collection & { artworksCount: number };
 export type NewCollection = typeof collections.$inferInsert;
+export type UpdateCollection = Partial<Omit<Collection, "id">>
 export type FullCollection = Collection & {
     artworks: Artwork[]
     categories: Category[]

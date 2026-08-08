@@ -13,6 +13,7 @@ import { AddArtworks } from "./add-artworks";
 import { Button } from "@/shared/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { FullCollection } from "../types/collections.types";
+import { useEffect } from "react";
 
 export function CreateCollection({
   initialArtworks,
@@ -34,10 +35,12 @@ export function CreateCollection({
     reset();
   }
 
-  if (collection) {
-    setData(collection);
-    setArtworks(collection.artworks ?? []);
-  }
+  useEffect(() => {
+    if (collection) {
+      setData(collection);
+      setArtworks(collection.artworks ?? []);
+    }
+  }, [collection, setData, setArtworks]);
 
   return (
     <AnimatePresence>
@@ -64,7 +67,7 @@ export function CreateCollection({
         </motion.div>
       )}
       {step === 2 && data && (
-        <AddArtworks collectionId={data.id} initialArtworks={initialArtworks} />
+        <AddArtworks isEditing={isEditting} collectionId={data.id} initialArtworks={initialArtworks} />
       )}
     </AnimatePresence>
   );

@@ -12,6 +12,7 @@ import { formatDate } from "@/shared/utils/date";
 import { Button } from "@/shared/components/ui/button";
 import { PenSquareIcon, Trash2Icon } from "lucide-react";
 import { CustomPagination } from "@/shared/components/dashboard/custom-pagination";
+import Link from "next/link";
 
 export default function CollectionsTable({
   collections,
@@ -43,7 +44,7 @@ export default function CollectionsTable({
             <TableCell>{collection.status}</TableCell>
             <TableCell>{formatDate(collection.updatedAt)}</TableCell>
             <TableCell className="flex gap-2">
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" aria-label="Editar" nativeButton={false} render={<Link href={`/dashboard/colecciones/edit/${collection.slug}`} />}>
                 <PenSquareIcon />
               </Button>
               <Button variant="destructive" size="icon">

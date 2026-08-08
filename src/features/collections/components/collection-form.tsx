@@ -83,6 +83,7 @@ export function CollectionForm({
 }: {
   isEditting?: boolean;
 }) {
+  const { data } = useCollectionStore();
   const {
     register,
     control,
@@ -95,9 +96,7 @@ export function CollectionForm({
     slugPreview,
     onSubmit,
     reset,
-  } = useCollectionForm();
-
-  const { data } = useCollectionStore();
+  } = useCollectionForm(data ? true : isEditting, data?.slug);
 
   useEffect(() => {
     if (data) {
@@ -166,8 +165,8 @@ export function CollectionForm({
 
         <FormSubmit
           isSubmitting={isSubmitting}
-          isSubmittingLabel="Creando..."
-          label="Crear colección"
+          isSubmittingLabel={(data ? true : isEditting) ? "Actualizando colección..." : "Creando colección..."}
+          label={(data ? true : isEditting) ? "Actualizar colección" : "Crear colección"}
         />
       </FieldSet>
     </form>

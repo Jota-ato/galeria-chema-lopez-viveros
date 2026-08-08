@@ -4,12 +4,14 @@ import {
   CollectionWithArtworksCount,
   FullCollection,
   NewCollection,
+  UpdateCollection,
 } from "../types/collections.types";
 import { artworks, collections } from "@/db/schema";
 import { count, eq, getColumns } from "drizzle-orm";
 
 export interface IColectionRepository {
   insert: (collection: NewCollection) => Promise<Collection>;
+  update: (data: UpdateCollection, slug: string) => Promise<Collection>;
   getBySlug(slug: string, full: true): Promise<FullCollection | null>;
   getBySlug(slug: string, full?: false): Promise<Collection | null>;
   getBySlug(slug: string, full?: boolean): Promise<Collection | null>;
@@ -28,6 +30,10 @@ class CollectionRepository implements IColectionRepository {
       .values(collection)
       .returning();
     return inserted;
+  }
+
+  async update(data: UpdateCollection, slug: string): Promise<Collection> {
+    return (await db.update(collections).set(data).where(eq(collections.slug, slug)).returning())[0];
   }
 
   getBySlug(slug: string, full: true): Promise<FullCollection | null>;

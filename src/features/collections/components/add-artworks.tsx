@@ -12,16 +12,18 @@ import { useDebounce } from "use-debounce";
 import { searchArtworksAction } from "@/features/artworks/actions/search-artworks";
 import { ArtworkBentoAlbum } from "@/features/artworks/components/artwork-bento-album";
 import { showResponse } from "@/shared/lib/client-actions";
-import { addArtworksToCollectionAction } from "../actions/collections-actions";
+import { addArtworksToCollectionAction, updateArtworksFromCollectionAction } from "../actions/collections-actions";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { useRouter } from "next/navigation";
 
 export function AddArtworks({
   initialArtworks,
   collectionId,
+  isEditing = false,
 }: {
   initialArtworks: Artwork[];
   collectionId: string;
+  isEditing?: boolean;
 }) {
   const router = useRouter();
   const { setStep, artworks, addArtwork, removeArtwork } = useCollectionStore();
@@ -56,10 +58,15 @@ export function AddArtworks({
             setIsAdding(true);
 
             showResponse(
-              await addArtworksToCollectionAction(
-                collectionId,
-                artworks.map((artwork) => artwork.id),
-              ),
+              isEditing ?
+                await updateArtworksFromCollectionAction(
+                  collectionId,
+                  artworks.map((artwork) => artwork.id),
+                )
+                : await addArtworksToCollectionAction(
+                  collectionId,
+                  artworks.map((artwork) => artwork.id),
+                ),
             );
 
             setIsAdding(false);

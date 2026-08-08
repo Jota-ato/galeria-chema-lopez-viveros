@@ -8,9 +8,9 @@ import {
 import { generateSlug } from "@/shared/lib/slug";
 import { useCollectionStore } from "../stores/collection-store";
 import { showResponse } from "@/shared/lib/client-actions";
-import { createCollectionAction } from "../actions/collections-actions";
+import { createCollectionAction, updateCollectionAction } from "../actions/collections-actions";
 
-export function useCollectionForm() {
+export function useCollectionForm(isEditting: boolean = false, oldSlug?: string) {
   const {
     register,
     control,
@@ -42,10 +42,13 @@ export function useCollectionForm() {
 
   const onSubmit = async (data: CollectionInput) => {
 
-    const response = showResponse(await createCollectionAction(data))
+    const response = showResponse(isEditting ? 
+      await updateCollectionAction(data, oldSlug!)
+      : await createCollectionAction(data)
+    )
 
     if (!response || !response.sucess) return
-    
+    console.log("response", response)
     setData(response.data);
     setStep(2);
   };

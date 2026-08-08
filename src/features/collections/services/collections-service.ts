@@ -13,12 +13,13 @@ import {
   artworksRepository,
   IArtworksRepository,
 } from "@/features/artworks/services/artworks-repository";
+import { ArtworkImages, ArtworkWithImages } from "@/features/artworks/types/artworks.types";
 
 class CollectionsService {
   constructor(
     private collectionRepository: IColectionRepository,
     private artworksRepository: IArtworksRepository,
-  ) {}
+  ) { }
 
   async createCollection(data: CollectionInput): Promise<Collection> {
     const dbCollection = await this.getCollectionBySlug(data.slug);
@@ -29,6 +30,16 @@ class CollectionsService {
       );
 
     return await this.collectionRepository.insert(data);
+  }
+
+  async updateCollection(data: CollectionInput, slug: string): Promise<Collection> {
+    const dbCollection = await this.getCollectionBySlug(slug);
+
+    if (!dbCollection) {
+      throw new AppError("Colección no encontrada");
+    }
+
+    return await this.collectionRepository.update(data, slug);
   }
 
   async getCollectionBySlug(slug: string, full: true): Promise<FullCollection | null>
@@ -42,19 +53,7 @@ class CollectionsService {
 
     if (!dbCollection) throw new AppError("Colección no encontrada");
 
-    const artworks = await Promise.all(
-      artworksIds.map(
-        async (artworkId) => await this.artworksRepository.getById(artworkId),
-      ),
-    );
-
-    const safeArtworks = artworks.filter(
-      (artwork) => artwork !== null,
-    ) as NonNullable<(typeof artworks)[number]>[];
-
-    if (safeArtworks.length !== artworksIds.length) {
-      throw new AppError("Algunas obras no fueron encontradas");
-    }
+    const safeArtworks = await this.getSafeArtworks(artworksIds);
 
     const updatedArtworks = await Promise.all(
       safeArtworks.map(
@@ -70,6 +69,43 @@ class CollectionsService {
     );
 
     return updatedArtworks;
+  }
+
+  async removeArtworksFromCollection(collectionId: string) {
+    const dbCollection = await this.collectionRepository.getById(collectionId);
+
+    if (!dbCollection) throw new AppError("Colección no encontrada");
+    return await this.artworksRepository.updateByCollectionId(
+      {
+        collectionId: null,
+      },
+      collectionId,
+    );
+  }
+
+  async updateArtworksFromCollection(collectionId: string, artworksIds: string[]) {
+    const dbCollection = await this.collectionRepository.getById(collectionId);
+
+    if (!dbCollection) throw new AppError("Colección no encontrada");
+    await this.removeArtworksFromCollection(collectionId);
+    await this.addArtworksToCollection(collectionId, artworksIds);
+  }
+
+  async getSafeArtworks(artworksIds: string[]): Promise<ArtworkWithImages[]> {
+    const artworks = await Promise.all(
+      artworksIds.map(
+        async (artworkId) => await this.artworksRepository.getById(artworkId),
+      ),
+    );
+
+    const safeArtworks = artworks.filter(
+      (artwork) => artwork !== null,
+    ) as NonNullable<(typeof artworks)[number]>[];
+
+    if (safeArtworks.length !== artworksIds.length) {
+      throw new AppError("Algunas obras no fueron encontradas");
+    }
+    return safeArtworks;
   }
 
   async getAllCollections(
