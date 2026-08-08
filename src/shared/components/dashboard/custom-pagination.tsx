@@ -68,6 +68,7 @@ export function CustomPagination({
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   const buildHref = (targetPage: number) => {
+    console.log(Math.min(page + 1, totalPages));
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", String(targetPage));
     return `${pathname}?${params.toString()}`;
@@ -83,7 +84,7 @@ export function CustomPagination({
         <PaginationItem>
           <PaginationPrevious
             text="Anterior"
-            href={buildHref(Math.max(page - 1, 1))}
+            href={buildHref(Math.max((+page - 1), 1))}
             aria-disabled={isFirst}
             className={isFirst ? "pointer-events-none opacity-50" : undefined}
           />
@@ -106,7 +107,7 @@ export function CustomPagination({
         <PaginationItem>
           <PaginationNext
             text="Siguiente"
-            href={buildHref(Math.min(page + 1, totalPages))}
+            href={buildHref(Math.min(+page + 1, totalPages))}
             aria-disabled={isLast}
             className={isLast ? "pointer-events-none opacity-50" : undefined}
           />
