@@ -13,17 +13,21 @@ import { useDeleteCollectionStore } from "../stores/delete-collection-store";
 import { Trash2 } from "lucide-react";
 import { showResponse } from "@/shared/lib/client-actions";
 import { deleteCollectionAction } from "../actions/collections-actions";
+import { useState } from "react";
 
 export function DeleteDialog() {
+  const [isLoading, setIsLoading] = useState(false);
   const { open, setOpen, collection, setCollection } =
     useDeleteCollectionStore();
 
   if (!collection) return null;
 
   const deleteCollection = async (withArtworks: boolean) => {
+    setIsLoading(true);
     showResponse(await deleteCollectionAction(collection.id, withArtworks));
     setOpen(false);
     setCollection(null);
+    setIsLoading(false);
   };
 
   return (
@@ -61,6 +65,7 @@ export function DeleteDialog() {
             Cancelar
           </AlertDialogCancel>
           <AlertDialogAction
+            disabled={isLoading}
             onClick={() => deleteCollection(false)}
             variant={"secondary"}
             className={"md:order-2"}
@@ -69,6 +74,7 @@ export function DeleteDialog() {
             Eliminar
           </AlertDialogAction>
           <AlertDialogAction
+            disabled={isLoading}
             onClick={() => deleteCollection(true)}
             variant={"destructive"}
             className={"md:order-3"}
