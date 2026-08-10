@@ -40,13 +40,8 @@ class SelectedCollectionsRepository implements ISelectedCollectionsRepository {
   }
 
   async syncAll(data: NewSelectedCollection[]): Promise<void> {
-    await db.transaction(async (tx) => {
-      await tx.delete(selectedCollections);
-
-      if (data.length > 0) {
-        await tx.insert(selectedCollections).values(data);
-      }
-    });
+    await db.delete(selectedCollections);
+    if (data.length) await db.insert(selectedCollections).values(data);
   }
 }
 

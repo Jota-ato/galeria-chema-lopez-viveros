@@ -1,4 +1,4 @@
-import { NewSelectedCollection } from "../types/collections.types";
+import { Collection, NewSelectedCollection } from "../types/collections.types";
 import {
   ISelectedCollectionsRepository,
   selectedCollectionsRepository,
@@ -9,13 +9,11 @@ class SelectedCollectionsService {
     private selectedCollectionsRepository: ISelectedCollectionsRepository,
   ) {}
 
-  async updateFeaturedCollections(
-    collections: { id: string; position: number }[],
-  ): Promise<void> {
+  async updateFeaturedCollections(collections: Collection[]): Promise<void> {
     const newSelectedCollections: NewSelectedCollection[] = collections.map(
-      (collection) => ({
+      (collection, idx) => ({
         collectionId: collection.id,
-        position: collection.position,
+        position: idx + 1,
       }),
     );
 

@@ -7,31 +7,28 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Collection } from "@/features/collections/types/collections.types"; // Ajusta el path a tus tipos
-import { Button } from "@/shared/components/ui/button"; // Asumiendo que tienes un componente Button
+import { Collection } from "@/features/collections/types/collections.types";
+import { Button } from "@/shared/components/ui/button";
+import { showResponse } from "@/shared/lib/client-actions";
+import { syncSelectedCollectionsAction } from "../actions/selected-collections-actions";
+import { Spinner } from "@/shared/components/ui/spinner";
 
 interface SelectSelectedCollectionsProps {
   collections: Collection[];
-  // En el futuro puedes recibir las colecciones ya seleccionadas desde la BD
-  // initialSelected?: Collection[];
 }
 
 export function SelectSelectedCollections({
   collections,
 }: SelectSelectedCollectionsProps) {
-  // Estado para las colecciones publicadas que aún no son destacadas
   const [available, setAvailable] = useState<Collection[]>(collections);
-
-  // Estado para las colecciones que el usuario ha seleccionado y ordenado
   const [selected, setSelected] = useState<Collection[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
-    // Si se suelta fuera de un área válida
     if (!destination) return;
 
-    // Si se suelta en la misma posición de la misma lista
     if (
       source.droppableId === destination.droppableId &&
       source.index === destination.index
@@ -39,7 +36,6 @@ export function SelectSelectedCollections({
       return;
     }
 
-    // Reordenamiento dentro de la misma lista
     if (source.droppableId === destination.droppableId) {
       const items =
         source.droppableId === "available"
@@ -57,7 +53,6 @@ export function SelectSelectedCollections({
       return;
     }
 
-    // Movimiento entre listas diferentes
     const sourceList =
       source.droppableId === "available"
         ? Array.from(available)
@@ -79,17 +74,16 @@ export function SelectSelectedCollections({
     }
   };
 
-  const handleSave = () => {
-    // Aquí es donde llamarás a tu Server Action con el array "selected"
-    // que ya tiene el orden correcto en base a su índice.
-    console.log("Colecciones destacadas a guardar:", selected);
+  const handleSave = async () => {
+    setIsSaving(true);
+    showResponse(await syncSelectedCollectionsAction(selected));
+    setIsSaving(false);
   };
 
   return (
     <div className="space-y-4">
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Columna de Disponibles */}
           <div className="flex flex-col border rounded-md bg-muted/50 p-4">
             <h3 className="font-semibold mb-4">Disponibles</h3>
             <Droppable droppableId="available">
@@ -125,7 +119,6 @@ export function SelectSelectedCollections({
             </Droppable>
           </div>
 
-          {/* Columna de Destacadas (Seleccionadas) */}
           <div className="flex flex-col border rounded-md bg-muted/50 p-4">
             <h3 className="font-semibold mb-4">
               Colecciones Destacadas (Ordenadas)
@@ -177,8 +170,18 @@ export function SelectSelectedCollections({
       </DragDropContext>
 
       <div className="flex justify-end pt-4">
-        <Button onClick={handleSave} disabled={selected.length === 0}>
-          Guardar Cambios
+        <Button
+          onClick={handleSave}
+          disabled={selected.length === 0 || isSaving}
+        >
+          {isSaving ? (
+            <span className="flex items-center gap-2">
+              <Spinner />
+              Guardando...
+            </span>
+          ) : (
+            "Guardar cambios"
+          )}
         </Button>
       </div>
     </div>
