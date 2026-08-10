@@ -1,0 +1,2 @@
+ALTER TABLE "selected_collections" ADD COLUMN "position" integer NOT NULL;--> statement-breakpoint
+ALTER TABLE "selected_collections" ADD CONSTRAINT "selected_collections_position_key" UNIQUE("position");

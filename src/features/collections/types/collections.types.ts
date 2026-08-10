@@ -1,4 +1,4 @@
-import { collections, collectionStatus } from "@/db/schema";
+import { collections, collectionStatus, selectedCollections } from "@/db/schema";
 import { Artwork } from "@/features/artworks/types/artworks.types";
 import { Category } from "@/features/categories/types/categories.types";
 
@@ -11,3 +11,6 @@ export type FullCollection = Collection & {
     artworks: Artwork[]
     categories: Category[]
 }
+
+export type SelectedCollection = typeof selectedCollections.$inferSelect
+export type NewSelectedCollection = typeof selectedCollections.$inferInsert
