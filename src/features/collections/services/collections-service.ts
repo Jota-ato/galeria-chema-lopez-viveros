@@ -6,6 +6,7 @@ import {
 } from "./collections-repository";
 import {
   Collection,
+  CollectionStatus,
   CollectionWithArtworksCount,
   FullCollection,
 } from "../types/collections.types";
@@ -155,6 +156,21 @@ class CollectionsService {
       total: await this.collectionRepository.getTotalCount(),
       collections: await this.collectionRepository.getAll(limit, page),
     };
+  }
+
+  async getCollectionsByStatus(
+    status: CollectionStatus,
+    full: true,
+  ): Promise<FullCollection[]>;
+  async getCollectionsByStatus(
+    status: CollectionStatus,
+    full?: false,
+  ): Promise<Collection[]>;
+  async getCollectionsByStatus(
+    status: CollectionStatus,
+    full?: boolean,
+  ): Promise<Collection[]> {
+    return await this.collectionRepository.getByStatus(status, full);
   }
 }
 

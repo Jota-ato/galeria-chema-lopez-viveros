@@ -1,66 +1,46 @@
-import { PainterIncomeChart } from "@/shared/components/dashboard/charts/main-chart";
+import { SelectSelectedCollections } from "@/features/collections/components/select-selected-collections";
+import { collectionsService } from "@/features/collections/services/collections-service";
+import { requireAuth } from "@/lib/auth-server";
 import { Heading } from "@/shared/components/typography/heading";
-import { Button } from "@/shared/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/shared/components/ui/card";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function DashboardHomePage() {
+  const { session } = await requireAuth();
+
+  if (!session) redirect("auth/sign-in");
+
+  // Fetch de servidor
+  const collections =
+    await collectionsService.getCollectionsByStatus("published");
+
   return (
     <>
       <Heading>Inicio</Heading>
-      <div className="grid md:grid-cols-4 gap-4 md:grid-rows-3">
-        <Card className="md:col-span-3">
-          <CardHeader>
-            <CardTitle>Publicar nueva obra</CardTitle>
-            <CardDescription>
-              Publica una nueva obra en la galería. Asegúrate de tener todos los
-              detalles y la imagen de la obra listos antes de proceder.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1" />
-          <CardFooter>
-            <Button
-              render={<Link href="/dashboard/obras/publish" />}
-              nativeButton={false}
-            >
-              Publicar obra
-            </Button>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Crear una nueva colección</CardTitle>
-            <CardDescription>
-              Agrega obras ya existentes a la colección.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1" />
-          <CardFooter>
-            <Button>Crear colección</Button>
-          </CardFooter>
-        </Card>
-        <Card className="md:col-span-full md:row-span-2">
-          <CardHeader>
-            <CardTitle>Ingresos estimados</CardTitle>
-            <CardDescription>
-              Visualiza tus ingresos estimados y el rendimiento de tus obras en
-              el tiempo. Mantente informado sobre cómo tus obras están generando
-              ingresos y ajusta tu estrategia según sea necesario.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1">
-            <PainterIncomeChart />
-          </CardContent>
-        </Card>
-      </div>
+      <Card className="md:col-span-3">
+        <CardHeader>
+          <CardTitle>Colecciones destacadas</CardTitle>
+          <CardDescription>
+            Estas son las colecciones que se muestran en la página de inicio.
+            Puedes agregar cuantas colecciones quieras. Para cambiar el orden
+            arrastra y suelta las colecciones en la lista de colecciones
+            destacadas.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-6">
+            Solo puedes destacar colecciones publicadas.
+          </p>
+
+          <SelectSelectedCollections collections={collections} />
+        </CardContent>
+      </Card>
     </>
   );
 }

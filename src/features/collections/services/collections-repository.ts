@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import {
   Collection,
+  CollectionStatus,
   CollectionWithArtworksCount,
   FullCollection,
   NewCollection,
@@ -21,7 +22,10 @@ export interface IColectionRepository {
     page: number,
   ) => Promise<CollectionWithArtworksCount[]>;
   getTotalCount: () => Promise<number>;
-  delete: (id: string) => Promise<void>
+  getByStatus(status: CollectionStatus, full: true): Promise<FullCollection[]>;
+  getByStatus(status: CollectionStatus, full?: false): Promise<Collection[]>;
+  getByStatus(status: CollectionStatus, full?: boolean): Promise<Collection[]>; 
+  delete: (id: string) => Promise<void>;
 }
 
 class CollectionRepository implements IColectionRepository {
@@ -34,20 +38,29 @@ class CollectionRepository implements IColectionRepository {
   }
 
   async update(data: UpdateCollection, slug: string): Promise<Collection> {
-    return (await db.update(collections).set(data).where(eq(collections.slug, slug)).returning())[0];
+    return (
+      await db
+        .update(collections)
+        .set(data)
+        .where(eq(collections.slug, slug))
+        .returning()
+    )[0];
   }
 
   getBySlug(slug: string, full: true): Promise<FullCollection | null>;
   getBySlug(slug: string, full: false): Promise<Collection | null>;
   getBySlug(slug: string, full?: boolean): Promise<Collection | null>;
-  async getBySlug(slug: string, full: boolean = false): Promise<Collection | null> {
+  async getBySlug(
+    slug: string,
+    full: boolean = false,
+  ): Promise<Collection | null> {
     return (
       (await db.query.collections.findFirst({
         where: { slug },
         with: {
           artworks: full ? true : undefined,
           categories: full ? true : undefined,
-        }
+        },
       })) || null
     );
   }
@@ -58,6 +71,18 @@ class CollectionRepository implements IColectionRepository {
         where: { id },
       })) || null
     );
+  }
+
+  async getByStatus(status: CollectionStatus, full: true): Promise<FullCollection[]>;
+  async getByStatus(status: CollectionStatus, full: false): Promise<Collection[]>;
+  async getByStatus(status: CollectionStatus, full?: boolean): Promise<Collection[]> {
+    return await db.query.collections.findMany({
+      where: { status },
+      with: {
+        artworks: full ? true : undefined,
+        categories: full ? true : undefined,
+      },
+    })
   }
 
   async getAll(
@@ -85,7 +110,7 @@ class CollectionRepository implements IColectionRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await db.delete(collections).where(eq(collections.id, id))
+    await db.delete(collections).where(eq(collections.id, id));
   }
 }
 
