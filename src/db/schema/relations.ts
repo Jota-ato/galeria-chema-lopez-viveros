@@ -14,7 +14,19 @@ export const relations = defineRelations(schema, (r) => ({
     selectedCollections: r.many.selectedCollections({
       from: r.collections.id,
       to: r.selectedCollections.collectionId,
-    })
+    }),
+  },
+  selectedCollections: {
+    collection: r.one.collections({
+      from: r.selectedCollections.collectionId,
+      to: r.collections.id,
+    }),
+  },
+  selectedArtworks: {
+    artwork: r.one.artworks({
+      from: r.selectedArtworks.artworkId,
+      to: r.artworks.id,
+    }),
   },
   artworks: {
     collection: r.one.collections({
@@ -32,7 +44,7 @@ export const relations = defineRelations(schema, (r) => ({
     selectedArtworks: r.many.selectedArtworks({
       from: r.artworks.id,
       to: r.selectedArtworks.artworkId,
-    })
+    }),
   },
   users: {
     sessions: r.many.sessions({

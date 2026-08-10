@@ -1,4 +1,4 @@
-import { Collection, NewSelectedCollection } from "../types/collections.types";
+import { Collection, FeaturedCollection, FeaturedCollectionDetailed, NewSelectedCollection } from "../types/collections.types";
 import {
   ISelectedCollectionsRepository,
   selectedCollectionsRepository,
@@ -8,6 +8,18 @@ class SelectedCollectionsService {
   constructor(
     private selectedCollectionsRepository: ISelectedCollectionsRepository,
   ) {}
+
+  async getFeaturedCollections(full: true): Promise<FeaturedCollectionDetailed[]>;  
+  async getFeaturedCollections(full?: false): Promise<FeaturedCollection[]>;
+  async getFeaturedCollections(
+    full?: boolean,
+  ): Promise<FeaturedCollection[] | FeaturedCollectionDetailed[]> {
+    if (full) {
+      return await this.selectedCollectionsRepository.getAll(true);
+    }
+    
+    return await this.selectedCollectionsRepository.getAll(false);
+  }
 
   async updateFeaturedCollections(collections: Collection[]): Promise<void> {
     const newSelectedCollections: NewSelectedCollection[] = collections.map(
