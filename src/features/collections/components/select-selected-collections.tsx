@@ -7,21 +7,26 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Collection } from "@/features/collections/types/collections.types";
+import {
+  Collection,
+  FeaturedCollection,
+} from "@/features/collections/types/collections.types";
 import { Button } from "@/shared/components/ui/button";
 import { showResponse } from "@/shared/lib/client-actions";
 import { syncSelectedCollectionsAction } from "../actions/selected-collections-actions";
 import { Spinner } from "@/shared/components/ui/spinner";
 
-interface SelectSelectedCollectionsProps {
-  collections: Collection[];
-}
-
 export function SelectSelectedCollections({
   collections,
-}: SelectSelectedCollectionsProps) {
-  const [available, setAvailable] = useState<Collection[]>(collections);
-  const [selected, setSelected] = useState<Collection[]>([]);
+  featuredCollections,
+}: {
+  collections: Collection[];
+  featuredCollections: FeaturedCollection[];
+}) {
+  const [selected, setSelected] = useState<Collection[]>(
+    featuredCollections.map((fc) => ({ ...fc.collection })),
+  );
+  const [available, setAvailable] = useState<Collection[]>(collections.filter(collection => selected.every(selectedCollection => selectedCollection.id !== collection.id)));
   const [isSaving, setIsSaving] = useState(false);
 
   const handleDragEnd = (result: DropResult) => {

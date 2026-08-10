@@ -1,5 +1,6 @@
 import { SelectSelectedCollections } from "@/features/collections/components/select-selected-collections";
 import { collectionsService } from "@/features/collections/services/collections-service";
+import { selectedCollectionsService } from "@/features/collections/services/selected-collections-service";
 import { requireAuth } from "@/lib/auth-server";
 import { Heading } from "@/shared/components/typography/heading";
 import {
@@ -16,9 +17,9 @@ export default async function DashboardHomePage() {
 
   if (!session) redirect("auth/sign-in");
 
-  // Fetch de servidor
   const collections =
     await collectionsService.getCollectionsByStatus("published");
+  const featuredCollections = await selectedCollectionsService.getFeaturedCollections();
 
   return (
     <>
@@ -38,7 +39,7 @@ export default async function DashboardHomePage() {
             Solo puedes destacar colecciones publicadas.
           </p>
 
-          <SelectSelectedCollections collections={collections} />
+          <SelectSelectedCollections  collections={collections} featuredCollections={featuredCollections} />
         </CardContent>
       </Card>
     </>
