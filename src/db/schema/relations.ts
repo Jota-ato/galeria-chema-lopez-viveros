@@ -11,6 +11,10 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.collections.id,
       to: r.collectionToCategory.collectionId,
     }),
+    selectedCollections: r.many.selectedCollections({
+      from: r.collections.id,
+      to: r.selectedCollections.collectionId,
+    })
   },
   artworks: {
     collection: r.one.collections({
@@ -24,6 +28,10 @@ export const relations = defineRelations(schema, (r) => ({
     categories: r.many.artworksToCategory({
       from: r.artworks.id,
       to: r.artworksToCategory.artworkId,
+    }),
+    selectedArtworks: r.many.selectedArtworks({
+      from: r.artworks.id,
+      to: r.selectedArtworks.artworkId,
     })
   },
   users: {

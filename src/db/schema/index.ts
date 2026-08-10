@@ -6,3 +6,5 @@ export * from './auth-schema';
 export * from './categories';
 export * from './collection-to-category';
 export * from './collections';
+export * from './selected-artworks';
+export * from './selected-collections';
