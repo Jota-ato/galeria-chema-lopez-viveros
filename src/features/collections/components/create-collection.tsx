@@ -25,20 +25,22 @@ export function CreateCollection({
   const isEditting = !!collection;
   const { step, data, setData, setArtworks, setStep, reset } = useCollectionStore();
 
-  if (step !== 1 && data === null) {
-    setStep(1);
-  }
+
 
   const value = step === 3 ? 100 : ((step - 1) / 2) * 100;
 
-  if (step === 3) {
-    reset();
-  }
+
 
   useEffect(() => {
     if (collection) {
       setData(collection);
       setArtworks(collection.artworks ?? []);
+    }
+    if (step !== 1 && data === null) {
+      setStep(1);
+    }
+    if (step === 3) {
+      reset();
     }
   }, [collection, setData, setArtworks]);
 
