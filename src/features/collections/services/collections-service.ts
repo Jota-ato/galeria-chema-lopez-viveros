@@ -13,13 +13,13 @@ import {
   artworksRepository,
   IArtworksRepository,
 } from "@/features/artworks/services/artworks-repository";
-import { ArtworkImages, ArtworkWithImages } from "@/features/artworks/types/artworks.types";
+import { ArtworkWithImages } from "@/features/artworks/types/artworks.types";
 
 class CollectionsService {
   constructor(
     private collectionRepository: IColectionRepository,
     private artworksRepository: IArtworksRepository,
-  ) { }
+  ) {}
 
   async createCollection(data: CollectionInput): Promise<Collection> {
     const dbCollection = await this.getCollectionBySlug(data.slug);
@@ -32,7 +32,10 @@ class CollectionsService {
     return await this.collectionRepository.insert(data);
   }
 
-  async updateCollection(data: CollectionInput, slug: string): Promise<Collection> {
+  async updateCollection(
+    data: CollectionInput,
+    slug: string,
+  ): Promise<Collection> {
     const dbCollection = await this.getCollectionBySlug(slug);
 
     if (!dbCollection) {
@@ -42,20 +45,36 @@ class CollectionsService {
     return await this.collectionRepository.update(data, slug);
   }
 
-  async deleteCollection(id: string): Promise<void> {
+  async deleteCollection(
+    id: string,
+    withArtworks: boolean = false,
+  ): Promise<void> {
     const dbCollection = await this.collectionRepository.getById(id);
 
     if (!dbCollection) {
       throw new AppError("Colección no encontrada");
     }
 
-    await this.removeArtworksFromCollection(id)
+    if (withArtworks) {
+      await this.artworksRepository.deleteByCollectionId(id);
+    } else {
+      await this.removeArtworksFromCollection(id);
+    }
     await this.collectionRepository.delete(id);
   }
 
-  async getCollectionBySlug(slug: string, full: true): Promise<FullCollection | null>
-  async getCollectionBySlug(slug: string, full?: false): Promise<Collection | null>
-  async getCollectionBySlug(slug: string, full: boolean = false): Promise<Collection | null> {
+  async getCollectionBySlug(
+    slug: string,
+    full: true,
+  ): Promise<FullCollection | null>;
+  async getCollectionBySlug(
+    slug: string,
+    full?: false,
+  ): Promise<Collection | null>;
+  async getCollectionBySlug(
+    slug: string,
+    full: boolean = false,
+  ): Promise<Collection | null> {
     return await this.collectionRepository.getBySlug(slug, full);
   }
 
@@ -94,7 +113,10 @@ class CollectionsService {
     );
   }
 
-  async updateArtworksFromCollection(collectionId: string, artworksIds: string[]) {
+  async updateArtworksFromCollection(
+    collectionId: string,
+    artworksIds: string[],
+  ) {
     const dbCollection = await this.collectionRepository.getById(collectionId);
 
     if (!dbCollection) throw new AppError("Colección no encontrada");

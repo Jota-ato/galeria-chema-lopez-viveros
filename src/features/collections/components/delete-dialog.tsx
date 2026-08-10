@@ -11,14 +11,20 @@ import {
 } from "@/shared/components/ui/alert-dialog";
 import { useDeleteCollectionStore } from "../stores/delete-collection-store";
 import { Trash2 } from "lucide-react";
-import { buttonVariants } from "@/shared/components/ui/button";
-import { cn } from "@/shared/lib/utils"; // ajusta el import si tu helper está en otro lado
+import { showResponse } from "@/shared/lib/client-actions";
+import { deleteCollectionAction } from "../actions/collections-actions";
 
 export function DeleteDialog() {
   const { open, setOpen, collection, setCollection } =
     useDeleteCollectionStore();
 
   if (!collection) return null;
+
+  const deleteCollection = async (withArtworks: boolean) => {
+    showResponse(await deleteCollectionAction(collection.id, withArtworks));
+    setOpen(false);
+    setCollection(null);
+  };
 
   return (
     <AlertDialog
@@ -54,11 +60,19 @@ export function DeleteDialog() {
           <AlertDialogCancel variant="outline" className="md:order-1">
             Cancelar
           </AlertDialogCancel>
-          <AlertDialogAction variant={"secondary"} className={"md:order-2"}>
+          <AlertDialogAction
+            onClick={() => deleteCollection(false)}
+            variant={"secondary"}
+            className={"md:order-2"}
+          >
             <Trash2 className="size-4" />
             Eliminar
           </AlertDialogAction>
-          <AlertDialogAction variant={"destructive"} className={"md:order-3"}>
+          <AlertDialogAction
+            onClick={() => deleteCollection(true)}
+            variant={"destructive"}
+            className={"md:order-3"}
+          >
             <Trash2 className="size-4" />
             Eliminar con obras
           </AlertDialogAction>

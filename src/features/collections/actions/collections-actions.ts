@@ -63,3 +63,12 @@ export const updateArtworksFromCollectionAction = adminAction(
     return "Obras actualizadas exitosamente a la colección";
   },
 );
+
+export const deleteCollectionAction = adminAction(async (
+  collectionId: string,
+  withArtworks: boolean = false,
+) => {
+  await collectionsService.deleteCollection(collectionId, withArtworks);
+
+  return "Colección eliminada exitosamente";
+})
