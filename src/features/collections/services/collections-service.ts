@@ -42,6 +42,17 @@ class CollectionsService {
     return await this.collectionRepository.update(data, slug);
   }
 
+  async deleteCollection(id: string): Promise<void> {
+    const dbCollection = await this.collectionRepository.getById(id);
+
+    if (!dbCollection) {
+      throw new AppError("Colección no encontrada");
+    }
+
+    await this.removeArtworksFromCollection(id)
+    await this.collectionRepository.delete(id);
+  }
+
   async getCollectionBySlug(slug: string, full: true): Promise<FullCollection | null>
   async getCollectionBySlug(slug: string, full?: false): Promise<Collection | null>
   async getCollectionBySlug(slug: string, full: boolean = false): Promise<Collection | null> {

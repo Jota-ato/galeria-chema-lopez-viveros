@@ -14,7 +14,12 @@ export interface IArtworksRepository {
   getById(id: string): Promise<ArtworkWithImages | null>;
   insert(data: NewArtwork): Promise<Artwork>;
   update(data: UpdatedArtwork, slug: string): Promise<Artwork>;
-  updateByCollectionId(data: UpdatedArtwork, collectionId: string): Promise<Artwork[]>;
+  delete(slug: string): Promise<void>;
+  deleteByCollectionId(collectionId: string): Promise<void>;
+  updateByCollectionId(
+    data: UpdatedArtwork,
+    collectionId: string,
+  ): Promise<Artwork[]>;
   search(query: string): Promise<ArtworkWithImages[]>;
 }
 
@@ -63,8 +68,23 @@ class ArtworksRepository implements IArtworksRepository {
     )[0];
   }
 
-  async updateByCollectionId(data: UpdatedArtwork, collectionId: string): Promise<Artwork[]> {
-    return await db.update(artworks).set(data).where(eq(artworks.collectionId, collectionId)).returning();
+  async delete(slug: string): Promise<void> {
+    await db.delete(artworks).where(eq(artworks.slug, slug));
+  }
+
+  async deleteByCollectionId(collectionId: string): Promise<void> {
+    await db.delete(artworks).where(eq(artworks.collectionId, collectionId));
+  }
+
+  async updateByCollectionId(
+    data: UpdatedArtwork,
+    collectionId: string,
+  ): Promise<Artwork[]> {
+    return await db
+      .update(artworks)
+      .set(data)
+      .where(eq(artworks.collectionId, collectionId))
+      .returning();
   }
 
   async search(query: string): Promise<ArtworkWithImages[]> {

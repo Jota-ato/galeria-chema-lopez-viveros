@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableHeader,
@@ -13,6 +14,7 @@ import { Button } from "@/shared/components/ui/button";
 import { PenSquareIcon, Trash2Icon } from "lucide-react";
 import { CustomPagination } from "@/shared/components/dashboard/custom-pagination";
 import Link from "next/link";
+import { useDeleteCollectionStore } from "../stores/delete-collection-store";
 
 export default function CollectionsTable({
   collections,
@@ -25,6 +27,8 @@ export default function CollectionsTable({
   page: number;
   total: number;
 }) {
+  const { setOpen, setCollection } = useDeleteCollectionStore();
+
   return (
     <Table>
       <TableHeader>
@@ -44,10 +48,27 @@ export default function CollectionsTable({
             <TableCell>{collection.status}</TableCell>
             <TableCell>{formatDate(collection.updatedAt)}</TableCell>
             <TableCell className="flex gap-2">
-              <Button variant="outline" size="icon" aria-label="Editar" nativeButton={false} render={<Link href={`/dashboard/colecciones/edit/${collection.slug}`} />}>
+              <Button
+                variant="outline"
+                size="icon"
+                aria-label="Editar"
+                nativeButton={false}
+                render={
+                  <Link
+                    href={`/dashboard/colecciones/edit/${collection.slug}`}
+                  />
+                }
+              >
                 <PenSquareIcon />
               </Button>
-              <Button variant="destructive" size="icon">
+              <Button
+                onClick={() => {
+                  setOpen(true);
+                  setCollection(collection);
+                }}
+                variant="destructive"
+                size="icon"
+              >
                 <Trash2Icon />
               </Button>
             </TableCell>

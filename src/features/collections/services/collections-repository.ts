@@ -21,6 +21,7 @@ export interface IColectionRepository {
     page: number,
   ) => Promise<CollectionWithArtworksCount[]>;
   getTotalCount: () => Promise<number>;
+  delete: (id: string) => Promise<void>
 }
 
 class CollectionRepository implements IColectionRepository {
@@ -81,6 +82,10 @@ class CollectionRepository implements IColectionRepository {
 
   async getTotalCount(): Promise<number> {
     return await db.$count(collections);
+  }
+
+  async delete(id: string): Promise<void> {
+    await db.delete(collections).where(eq(collections.id, id))
   }
 }
 

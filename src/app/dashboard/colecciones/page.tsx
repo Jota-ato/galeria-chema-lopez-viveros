@@ -7,6 +7,7 @@ import { SearchBar } from "@/shared/components/ui/search-bar";
 import { requireAuth } from "@/lib/auth-server";
 import { redirect } from "next/navigation";
 import { collectionsService } from "@/features/collections/services/collections-service";
+import { DeleteDialog } from "@/features/collections/components/delete-dialog";
 
 const LIMIT = 10;
 
@@ -64,6 +65,7 @@ export default async function CollectionsPage({
         collections={collections}
         total={total}
       />
+      <DeleteDialog />
     </>
   );
 }
