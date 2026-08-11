@@ -57,7 +57,7 @@ const BentoCard = ({
   >
     <div>{background}</div>
     <div className="p-4">
-      <div className="pointer-events-none z-10 flex transform-gpu flex-col gap-1 transition-all duration-300 lg:group-hover:-translate-y-10">
+      <div className="pointer-events-none z-10 flex transform-gpu flex-col gap-1 transition-all duration-300 lg:group-hover:-translate-y-10 font-serif">
         {Icon && (<Icon className="size-10 origin-left transform-gpu text-foreground transition-all duration-300 ease-in-out group-hover:scale-75" />)}
         <h3 className="text-xl font-semibold text-foreground">
           {name}
@@ -70,7 +70,7 @@ const BentoCard = ({
           "pointer-events-none flex w-full translate-y-0 transform-gpu flex-row items-center transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 lg:hidden"
         )}
       >
-        <Button variant="link" size="sm" className="pointer-events-auto p-0 text-primary" render={<Link href={href} />} nativeButton={false}>{cta}<ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" /></Button>
+        <Button variant="link" size="sm" className="pointer-events-auto p-0 text-primary font-serif" render={<Link href={href} />} nativeButton={false}>{cta}<ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" /></Button>
       </div>
     </div>
 
@@ -79,7 +79,7 @@ const BentoCard = ({
         "pointer-events-none absolute bottom-0 hidden w-full translate-y-10 transform-gpu flex-row items-center p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 lg:flex"
       )}
     >
-      <Button variant="link" size="sm" className="pointer-events-auto p-0 text-primary" render={<a href={href} />} nativeButton={false}>{cta}<ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" /></Button>
+      <Button variant="link" size="sm" className="pointer-events-auto p-0 text-primary font-serif" render={<a href={href} />} nativeButton={false}>{cta}<ArrowRightIcon className="ms-2 h-4 w-4 rtl:rotate-180" /></Button>
     </div>
 
     <div className="pointer-events-none absolute inset-0 transform-gpu transition-all duration-300 group-hover:bg-black/3 group-hover:dark:bg-neutral-800/10" />

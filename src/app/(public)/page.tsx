@@ -1,16 +1,11 @@
-import { Container } from "@/shared/components/layout/container";
+import { SelectedColleccionsSection } from "@/features/landing/components/selected-coleccionts-section";
 import { Hero } from "@/shared/components/public/hero";
-import { Heading } from "@/shared/components/typography/heading";
 
-export default function LandingPage() {
+export default async function LandingPage() {
   return (
-    <main className="">
+    <main>
       <Hero />
-      <section className="min-h-screen py-8 md:py-12">
-        <Container>
-          <Heading>Ve mis obras más destacadas</Heading>
-        </Container>
-      </section>
+      <SelectedColleccionsSection />
     </main>
   );
 }
