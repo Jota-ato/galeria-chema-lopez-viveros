@@ -7,31 +7,33 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import {
-  Collection,
-  FeaturedCollection,
-} from "@/features/collections/types/collections.types";
 import { Button } from "@/shared/components/ui/button";
-import { showResponse } from "@/shared/lib/client-actions";
-import { syncSelectedCollectionsAction } from "../actions/selected-collections-actions";
 import { Spinner } from "@/shared/components/ui/spinner";
-import { SaveIcon } from "lucide-react";
+import { Artwork } from "../types/artworks.types";
+import { TRANSLATE_STATUS_MAP } from "../utils/status";
 
-export function SelectSelectedCollections({
-  collections,
-  featuredCollections,
-}: {
-  collections: Collection[];
-  featuredCollections: FeaturedCollection[];
-}) {
-  const [selected, setSelected] = useState<Collection[]>(
-    featuredCollections.map((fc) => ({ ...fc.collection })),
+export interface SelectedArtworkEntry {
+  position: number;
+  artwork: Artwork;
+}
+
+export interface SelectSelectedArtworksProps {
+  artworks: Artwork[];
+  selectedArtworks: SelectedArtworkEntry[];
+}
+
+export function SelectSelectedArtworks({
+  artworks,
+  selectedArtworks,
+}: SelectSelectedArtworksProps) {
+  const [selected, setSelected] = useState<Artwork[]>(
+    selectedArtworks
+      .sort((a, b) => a.position - b.position)
+      .map((entry) => ({ ...entry.artwork })),
   );
-  const [available, setAvailable] = useState<Collection[]>(
-    collections.filter((collection) =>
-      selected.every(
-        (selectedCollection) => selectedCollection.id !== collection.id,
-      ),
+  const [available, setAvailable] = useState<Artwork[]>(
+    artworks.filter((artwork) =>
+      selected.every((selectedArtwork) => selectedArtwork.id !== artwork.id),
     ),
   );
   const [isSaving, setIsSaving] = useState(false);
@@ -87,9 +89,7 @@ export function SelectSelectedCollections({
   };
 
   const handleSave = async () => {
-    setIsSaving(true);
-    showResponse(await syncSelectedCollectionsAction(selected));
-    setIsSaving(false);
+    
   };
 
   return (
@@ -105,10 +105,10 @@ export function SelectSelectedCollections({
                   ref={provided.innerRef}
                   className="flex-1 space-y-2 min-h-50"
                 >
-                  {available.map((collection, index) => (
+                  {available.map((artwork, index) => (
                     <Draggable
-                      key={collection.id}
-                      draggableId={collection.id}
+                      key={artwork.id}
+                      draggableId={artwork.id}
                       index={index}
                     >
                       {(provided, snapshot) => (
@@ -120,7 +120,23 @@ export function SelectSelectedCollections({
                             snapshot.isDragging ? "ring-2 ring-primary" : ""
                           }`}
                         >
-                          {collection.name}
+                          <div className="flex items-center gap-3">
+                            {artwork.imageUrl && (
+                              <img
+                                src={artwork.imageUrl}
+                                alt={artwork.title}
+                                className="w-10 h-10 object-cover rounded"
+                              />
+                            )}
+                            <div className="min-w-0">
+                              <p className="font-medium truncate">
+                                {artwork.title}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {TRANSLATE_STATUS_MAP[artwork.status]}
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </Draggable>
@@ -132,9 +148,7 @@ export function SelectSelectedCollections({
           </div>
 
           <div className="flex flex-col border rounded-md bg-muted/50 p-4">
-            <h3 className="font-semibold mb-4">
-              Colecciones Destacadas (Ordenadas)
-            </h3>
+            <h3 className="font-semibold mb-4">Obras Destacadas (Ordenadas)</h3>
             <Droppable droppableId="selected">
               {(provided) => (
                 <div
@@ -144,13 +158,13 @@ export function SelectSelectedCollections({
                 >
                   {selected.length === 0 && (
                     <p className="text-sm text-muted-foreground text-center py-8">
-                      Arrastra colecciones aquí
+                      Arrastra obras aquí
                     </p>
                   )}
-                  {selected.map((collection, index) => (
+                  {selected.map((artwork, index) => (
                     <Draggable
-                      key={collection.id}
-                      draggableId={collection.id}
+                      key={artwork.id}
+                      draggableId={artwork.id}
                       index={index}
                     >
                       {(provided, snapshot) => (
@@ -162,11 +176,22 @@ export function SelectSelectedCollections({
                             snapshot.isDragging ? "ring-2 ring-primary" : ""
                           }`}
                         >
-                          <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground">⋮⋮</span>
-                            {collection.name}
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span className="text-muted-foreground shrink-0">
+                              ⋮⋮
+                            </span>
+                            {artwork.imageUrl && (
+                              <img
+                                src={artwork.imageUrl}
+                                alt={artwork.title}
+                                className="w-10 h-10 object-cover rounded shrink-0"
+                              />
+                            )}
+                            <p className="font-medium truncate">
+                              {artwork.title}
+                            </p>
                           </div>
-                          <span className="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground">
+                          <span className="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground shrink-0 ml-2">
                             Pos: {index + 1}
                           </span>
                         </div>
@@ -192,10 +217,7 @@ export function SelectSelectedCollections({
               Guardando...
             </span>
           ) : (
-            <span className="flex items-center gap-2">
-              <SaveIcon className="size-4" />
-              Guardar cambios
-            </span>
+            "Guardar cambios"
           )}
         </Button>
       </div>
