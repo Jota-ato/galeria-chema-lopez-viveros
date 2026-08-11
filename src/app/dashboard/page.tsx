@@ -24,6 +24,7 @@ export default async function DashboardHomePage() {
   const featuredCollections = await selectedCollectionsService.getFeaturedCollections();
   const artworks = await artworksService.getLastArtworks(100, 1);
 
+
   return (
     <>
       <Heading>Inicio</Heading>
@@ -47,20 +48,13 @@ export default async function DashboardHomePage() {
       </Card>
       <Card className="md:col-span-3">
         <CardHeader>
-          <CardTitle>Colecciones destacadas</CardTitle>
+          <CardTitle>Obras destacadas</CardTitle>
           <CardDescription>
-            Estas son las colecciones que se muestran en la página de inicio.
-            Puedes agregar cuantas colecciones quieras. Para cambiar el orden
-            arrastra y suelta las colecciones en la lista de colecciones
-            destacadas.
+            Estas son las obras que se muestran en la página de inicio. Puedes agregar cuantas obras quieras. Para cambiar el orden arrastra y suelta las obras en la lista de obras destacadas.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-6">
-            Solo puedes destacar colecciones publicadas.
-          </p>
-
-          <SelectSelectedArtworks artworks={artworks} selectedArtworks={[]} />
+          <SelectSelectedArtworks artworks={artworks} featuredArtworks={[]} />
         </CardContent>
       </Card>
     </>

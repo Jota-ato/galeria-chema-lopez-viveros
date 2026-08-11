@@ -9,27 +9,23 @@ import {
 } from "@hello-pangea/dnd";
 import { Button } from "@/shared/components/ui/button";
 import { Spinner } from "@/shared/components/ui/spinner";
-import { Artwork } from "../types/artworks.types";
+import { showResponse } from "@/shared/lib/client-actions";
+import { syncSelectedArtworksAction } from "../actions/selected-artworks-actions";
+import { Artwork, FeaturedArtwork } from "../types/artworks.types";
 import { TRANSLATE_STATUS_MAP } from "../utils/status";
-
-export interface SelectedArtworkEntry {
-  position: number;
-  artwork: Artwork;
-}
-
-export interface SelectSelectedArtworksProps {
-  artworks: Artwork[];
-  selectedArtworks: SelectedArtworkEntry[];
-}
+import { SaveIcon } from "lucide-react";
 
 export function SelectSelectedArtworks({
   artworks,
-  selectedArtworks,
-}: SelectSelectedArtworksProps) {
+  featuredArtworks,
+}: {
+  artworks: Artwork[];
+  featuredArtworks: FeaturedArtwork[];
+}) {
   const [selected, setSelected] = useState<Artwork[]>(
-    selectedArtworks
+    featuredArtworks
       .sort((a, b) => a.position - b.position)
-      .map((entry) => ({ ...entry.artwork })),
+      .map((fa) => ({ ...fa.artwork })),
   );
   const [available, setAvailable] = useState<Artwork[]>(
     artworks.filter((artwork) =>
@@ -89,7 +85,9 @@ export function SelectSelectedArtworks({
   };
 
   const handleSave = async () => {
-    
+    setIsSaving(true);
+    showResponse(await syncSelectedArtworksAction(selected));
+    setIsSaving(false);
   };
 
   return (
@@ -217,7 +215,10 @@ export function SelectSelectedArtworks({
               Guardando...
             </span>
           ) : (
-            "Guardar cambios"
+            <span className="flex items-center gap-2">
+              <SaveIcon className="size-4" />
+              Guardar cambios
+            </span>
           )}
         </Button>
       </div>

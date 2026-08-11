@@ -9,3 +9,22 @@ export type ArtworkImages = typeof artworksImages.$inferInsert;
 export type ArtworkWithImages = Artwork & {
   images: ArtworkImages[];
 };
+
+export interface FeaturedArtwork {
+  id: string;
+  position: number;
+  artworkId: string;
+  artwork: Artwork;
+}
+
+export interface FeaturedArtworkDetailed extends FeaturedArtwork {
+  artwork: Artwork & {
+    images?: { id: string; imageUrl: string }[];
+    collection?: { id: string; name: string } | null;
+  };
+}
+
+export interface NewSelectedArtwork {
+  artworkId: string;
+  position: number;
+}
