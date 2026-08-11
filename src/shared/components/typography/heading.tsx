@@ -24,7 +24,7 @@ export function Heading({
 
     return (
         <Tag className={cn(
-            "font-bold text-center",
+            "font-bold text-left",
             sizeMap[level], className
         )}>
             {children}
