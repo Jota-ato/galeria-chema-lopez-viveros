@@ -4,10 +4,14 @@ import { cn } from "@/shared/lib/utils";
 import Image from "next/image";
 import { selectedArtworksService } from "@/features/artworks/services/selected-artworks-service";
 import { formatPrice } from "@/shared/utils/price";
-import { ArtworkStatus, TRANSLATE_STATUS_MAP } from "@/features/artworks/utils/status";
+import {
+  ArtworkStatus,
+  TRANSLATE_STATUS_MAP,
+} from "@/features/artworks/utils/status";
 import { Button } from "@/shared/components/ui/button";
 import Link from "next/link";
 import { ArtworkRatio } from "@/features/artworks/types/artworks.types";
+import { Title } from "@/shared/components/public/title";
 
 const aspectClass: Record<ArtworkRatio, string> = {
   wide: "aspect-[21/9]",
@@ -30,14 +34,14 @@ export async function SelectedArtworksSection() {
   return (
     <section id="selected-artworks" className="py-20 md:py-32 bg-stone-50">
       <Container>
-        <div className="flex flex-col gap-2 mb-16 md:mb-24">
-          <span className="text-sm tracking-[0.2em] uppercase text-stone-500">
-            Piezas seleccionadas
-          </span>
+        <Title
+          className="flex flex-col gap-2 mb-16 md:mb-24"
+          textAbove="Piezas seleccionadas"
+        >
           <Heading level={2} className="font-serif text-4xl md:text-5xl">
             Obras individuales
           </Heading>
-        </div>
+        </Title>
 
         <div className="flex flex-col gap-24 md:gap-32">
           {artworks.map((artwork, index) => {
@@ -64,17 +68,15 @@ export async function SelectedArtworksSection() {
                     />
                   </div>
                   <div className="flex flex-col items-center text-center gap-3 max-w-xl mx-auto">
-                    <span className="text-xs tracking-[0.2em] uppercase text-stone-400">
-                      Obra {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <Heading level={3} className="font-serif italic text-3xl">
-                      {artwork.artwork.title}
-                    </Heading>
-                    {artwork.artwork.description && (
-                      <p className="text-stone-600 leading-relaxed">
-                        {artwork.artwork.description}
-                      </p>
-                    )}
+                    <Title
+                      textAbove={`Obra ${String(index + 1).padStart(2, "0")}`}
+                      textBelow={artwork.artwork.description!}
+                    >
+                      <Heading level={3} className="font-serif italic text-3xl">
+                        {artwork.artwork.title}
+                      </Heading>
+                    </Title>
+
                     <div className="flex flex-col items-left gap-4 mt-1">
                       <div className="flex gap-6 items-center">
                         <span
@@ -137,20 +139,14 @@ export async function SelectedArtworksSection() {
                       : "md:items-start",
                   )}
                 >
-                  <span className="text-xs tracking-[0.2em] uppercase text-stone-400">
-                    Obra {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <Heading
-                    level={3}
-                    className="font-serif italic text-2xl md:text-3xl"
+                  <Title
+                    textAbove={`Obra ${String(index + 1).padStart(2, "0")}`}
+                    textBelow={artwork.artwork.description!}
                   >
-                    {artwork.artwork.title}
-                  </Heading>
-                  {artwork.artwork.description && (
-                    <p className="text-stone-600 leading-relaxed max-w-md">
-                      {artwork.artwork.description}
-                    </p>
-                  )}
+                    <Heading level={3} className="font-serif italic text-3xl">
+                      {artwork.artwork.title}
+                    </Heading>
+                  </Title>
                   <div className="flex flex-col items-left gap-4 mt-2">
                     <div className="flex gap-6 items-center">
                       <span

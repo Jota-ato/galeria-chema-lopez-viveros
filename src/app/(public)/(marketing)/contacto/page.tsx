@@ -1,6 +1,7 @@
 import { ContactForm } from "@/features/contact/components/contact-form";
 import { Instagram } from "@/features/contact/components/instagram";
 import { Container } from "@/shared/components/layout/container";
+import { Title } from "@/shared/components/public/title";
 import { Heading } from "@/shared/components/typography/heading";
 import Image from "next/image";
 
@@ -8,16 +9,11 @@ export default function ContactPage() {
   return (
     <Container className="space-y-12">
       <div className="flex flex-col gap-2">
-        <span className="text-sm tracking-[0.2em] uppercase text-stone-500">
-          Escríbeme
-        </span>
-        <Heading className="font-serif text-4xl md:text-5xl">
-          Contáctame
-        </Heading>
-        <p className="text-stone-600 leading-relaxed max-w-md mt-2">
-          Para adquirir una pieza, encargar una obra o platicar sobre una
-          exhibición, este es el lugar.
-        </p>
+        <Title textAbove="Escríbeme" textBelow="Para adquirir una pieza, encargar una obra o platicar sobre una exhibición, este es el lugar.">
+          <Heading>
+            Contáctame
+          </Heading>
+        </Title>
         <div>
           <a
             href="https://www.instagram.com/chemalv_art/"
