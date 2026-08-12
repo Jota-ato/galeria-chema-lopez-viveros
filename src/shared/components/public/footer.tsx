@@ -5,7 +5,7 @@ import { navigationLinks } from "./navigation";
 
 export function Footer() {
   return (
-    <footer className="bg-secondary p-12">
+    <footer className="bg-secondary py-12">
       <Container className="flex flex-col md:flex-row gap-8 justify-between">
         <div className="flex flex-col">
           <Heading level={2}>Galería Chema López Viveros</Heading>
