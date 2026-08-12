@@ -10,8 +10,8 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 
-const navigationLinks: {
-  href: Route;
+export const navigationLinks: {
+  href: string;
   label: string;
 }[] = [
   {
