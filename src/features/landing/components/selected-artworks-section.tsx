@@ -24,7 +24,7 @@ const statusStyle: Record<ArtworkStatus, string> = {
   exhibition_only: "border-stone-300 text-stone-500",
 };
 
-export async function FeaturedArtworksSection() {
+export async function SelectedArtworksSection() {
   const artworks = await selectedArtworksService.getFeaturedArtworks(true);
 
   return (
