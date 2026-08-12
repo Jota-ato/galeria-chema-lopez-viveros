@@ -40,7 +40,7 @@ export async function SelectedColleccionsSection() {
             {featuredCollections.map((featuredCollection, index) => (
               <article
                 key={featuredCollection.id}
-                className="group border-t border-stone-200 first:border-t-0 py-16 md:py-24"
+                className="border-t border-stone-200 first:border-t-0 py-16 md:py-24"
               >
                 <header className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-10 items-start mb-10">
                   <span className="font-serif text-2xl text-stone-400 tabular-nums">
@@ -64,7 +64,7 @@ export async function SelectedColleccionsSection() {
                     alt={featuredCollection.collection.name}
                     fill
                     sizes="(min-width: 768px) 1200px, 100vw"
-                    className="object-cover transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.02]"
+                    className="object-cover transition-transform duration-700 motion-reduce:transition-none"
                     priority={index === 0}
                   />
                 </div>
