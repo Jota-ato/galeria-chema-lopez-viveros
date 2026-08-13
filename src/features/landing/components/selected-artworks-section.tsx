@@ -51,7 +51,7 @@ export async function SelectedArtworksSection() {
               return (
                 <article
                   key={artwork.artwork.id}
-                  className="flex flex-col gap-6"
+                  className="flex flex-col gap-6 timeline-view animate-range-[entry_0%_cover_30%] [entry_10%_cover_40%] animate-fade-in-right"
                 >
                   <div
                     className={cn(
@@ -113,8 +113,10 @@ export async function SelectedArtworksSection() {
               <article
                 key={artwork.artwork.id}
                 className={cn(
-                  "flex flex-col gap-6 md:gap-12 md:items-center",
-                  isReversed ? "md:flex-row-reverse" : "md:flex-row",
+                  "flex flex-col gap-6 md:gap-12 md:items-center timeline-view  animate-slide-distance-[2rem] animate-range-[entry_0%_cover_30%] [entry_10%_cover_40%]",
+                  isReversed
+                    ? "md:flex-row-reverse animate-fade-in-left"
+                    : "md:flex-row animate-fade-in-right",
                 )}
               >
                 <div
