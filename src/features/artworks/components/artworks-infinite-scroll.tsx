@@ -13,11 +13,13 @@ export function ArtworkInfiniteScroll({
   artworkWrapper,
   isSelected,
   onToggleSelect,
+  admin = false
 }: {
   initialArtworks: Artwork[];
   artworkWrapper?: ComponentType<ArtworkWrapperProps>;
   isSelected?: (artwork: Artwork) => boolean;
   onToggleSelect?: (artwork: Artwork) => void;
+  admin?: boolean;
 }) {
   const [artworks, setArtworks] = useState(initialArtworks);
   const [page, setPage] = useState(1);
@@ -60,6 +62,7 @@ export function ArtworkInfiniteScroll({
         artworkWrapper={artworkWrapper}
         isSelected={isSelected}
         onToggleSelect={onToggleSelect}
+        admin={admin}
       />
 
       <div ref={sentinelRef} className="h-10" />
