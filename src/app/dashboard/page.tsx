@@ -1,5 +1,6 @@
 import { SelectSelectedArtworks } from "@/features/artworks/components/select-selected-artworks";
 import { artworksService } from "@/features/artworks/services/artworks-service";
+import { selectedArtworksService } from "@/features/artworks/services/selected-artworks-service";
 import { SelectSelectedCollections } from "@/features/collections/components/select-selected-collections";
 import { collectionsService } from "@/features/collections/services/collections-service";
 import { selectedCollectionsService } from "@/features/collections/services/selected-collections-service";
@@ -23,6 +24,7 @@ export default async function DashboardHomePage() {
     await collectionsService.getCollectionsByStatus("published");
   const featuredCollections = await selectedCollectionsService.getFeaturedCollections();
   const artworks = await artworksService.getLastArtworks(100, 1);
+  const featuredArtworks = await selectedArtworksService.getFeaturedArtworks();
 
 
   return (
@@ -54,7 +56,7 @@ export default async function DashboardHomePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SelectSelectedArtworks artworks={artworks} featuredArtworks={[]} />
+          <SelectSelectedArtworks artworks={artworks} featuredArtworks={featuredArtworks} />
         </CardContent>
       </Card>
     </>
