@@ -6,7 +6,7 @@ import { Title } from "./title";
 
 export function Hero() {
   return (
-    <section className="bg-[url('/img/hero.jpeg')] bg-center bg-no-repeat bg-cover min-h-screen">
+    <section className="bg-[url('/img/hero.webp')] bg-center bg-no-repeat bg-cover min-h-screen">
       <div className="relative inset-0 bg-black/40 size-full min-h-screen flex flex-col gap-8 items-center justify-center text-white p-8 md:pb-12">
         <Title
           className="[&>p]:text-white [&>span]:text-white"
