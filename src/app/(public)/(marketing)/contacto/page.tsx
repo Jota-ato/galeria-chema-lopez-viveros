@@ -7,12 +7,13 @@ import Image from "next/image";
 
 export default function ContactPage() {
   return (
-    <Container className="space-y-12">
+    <Container className="space-y-12 pt-12">
       <div className="flex flex-col gap-2">
-        <Title textAbove="Escríbeme" textBelow="Para adquirir una pieza, encargar una obra o platicar sobre una exhibición, este es el lugar.">
-          <Heading>
-            Contáctame
-          </Heading>
+        <Title
+          textAbove="Escríbeme"
+          textBelow="Para adquirir una pieza, encargar una obra o platicar sobre una exhibición, este es el lugar."
+        >
+          <Heading>Contáctame</Heading>
         </Title>
         <div>
           <a

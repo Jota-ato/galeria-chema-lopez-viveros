@@ -10,7 +10,7 @@ export default async function ObrasPage() {
   const artworks = await artworksService.getLastArtworks(5, 1);
 
   return (
-    <div>
+    <div className="pt-12">
       <Container>
         <Title
           textAbove="Más de una década de práctica artística"
@@ -34,7 +34,7 @@ export default async function ObrasPage() {
 
       <SelectedArtworksSection />
 
-      <section className="bg-primary my-8 md:my-12 py-8 flex items-center justify-center text-primary-foreground">
+      <section className="bg-primary mt-8 md:mt-12 py-8 flex items-center justify-center text-primary-foreground">
         <Container>
           <Title
             className="mb-8 [&>p]:text-primary-foreground [&>span]:text-primary-foreground"
