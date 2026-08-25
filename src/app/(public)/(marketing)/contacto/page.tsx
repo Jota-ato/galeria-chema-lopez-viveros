@@ -35,7 +35,7 @@ export default function ContactPage() {
         <div className="md:w-2/5 shrink-0">
           <div className="relative w-full aspect-5/8 overflow-hidden rounded-sm">
             <Image
-              src="/img/artwork4.jpeg"
+              src="/img/gato.webp"
               alt="Gato"
               fill
               sizes="(min-width: 768px) 40vw, 100vw"
