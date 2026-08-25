@@ -8,7 +8,11 @@ export function Hero() {
   return (
     <section className="bg-[url('/img/hero.jpeg')] bg-center bg-no-repeat bg-cover min-h-screen">
       <div className="relative inset-0 bg-black/40 size-full min-h-screen flex flex-col gap-8 items-center justify-center text-white p-8 md:pb-12">
-        <Title className="[&>p]:text-white [&>span]:text-white" textAbove="Jose María López Viveros" textBelow="Pintor mexicano nacido en 2010">
+        <Title
+          className="[&>p]:text-white [&>span]:text-white"
+          textAbove="Jose María López Viveros"
+          textBelow="Pintor mexicano nacido en 2010"
+        >
           <Heading className="text-4xl! sm:text-6xl! max-w-xs md:max-w-2xl">
             Pintura contemporánea
           </Heading>
@@ -19,7 +23,7 @@ export function Hero() {
           className="cursor-pointer text-base py-8 md:text-xl font-bold absolute bottom-4 flex-col animate-float animate-iteration-count-infinite animate-duration-3000"
           onClick={() => {
             document
-              .getElementById("selected-artworks")
+              .getElementById("selected-collections")
               ?.scrollIntoView({ behavior: "smooth" });
           }}
         >

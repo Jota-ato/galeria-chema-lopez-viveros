@@ -5,7 +5,7 @@ async function seed() {
   const newUser = await auth.api.createUser({
     body: {
       email: "juliozavala@julio-zavala.me",
-      password: "Ml_kowalski15@",
+      password: "Password123!",
       name: "Julio Zavala",
     },
   });

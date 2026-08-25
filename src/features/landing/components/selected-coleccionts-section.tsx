@@ -29,11 +29,11 @@ export async function SelectedColleccionsSection() {
     await selectedCollectionsService.getFeaturedCollections(true);
 
   return (
-    <section className="py-20 md:py-32">
+    <section className="py-20 md:py-32" id="selected-collections">
       <Container>
         <Title textAbove="Colecciones destacadas">
           <Heading level={2} className="font-serif text-4xl md:text-5xl">
-            Ve mis obras más destacadas
+            Ve mis colecciones destacadas
           </Heading>
         </Title>
 
