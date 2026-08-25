@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function AboutMePage() {
   return (
     <div className="bg-background text-foreground">
-      <section className="relative min-h-[60vh] md:min-h-[70vh] bg-[url('/img/sobre-mi-hero-image.webp')] bg-cover bg-bottom bg-no-repeat flex items-end">
+      <section className="relative min-h-160 bg-[url('/img/sobre-mi-hero-image.webp')] bg-cover bg-bottom bg-no-repeat flex items-end">
         <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/20" />
 
         <Container className="relative z-10 pb-12 md:pb-16 h-full">
