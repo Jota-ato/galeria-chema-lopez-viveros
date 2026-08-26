@@ -85,7 +85,7 @@ export default async function ArtworkPage({
   const contactMessage = `Hola, estoy interesado en la obra "${artwork.title}" que vi en la galería de Chema López Viveros. ¿Podrías darme más información sobre ella?`;
 
   return (
-    <Container className="space-y-4 pt-12">
+    <Container className="space-y-4 py-12">
       <section className="flex flex-col lg:flex-row gap-6 md:gap-8">
         <div>
           {artwork.images.length ? (
