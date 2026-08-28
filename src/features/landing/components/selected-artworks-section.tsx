@@ -71,9 +71,11 @@ export async function SelectedArtworksSection() {
                     <Title
                       textAbove={`Obra ${String(index + 1).padStart(2, "0")}`}
                       textBelow={artwork.artwork.description!}
-                      className="text-center!"
                     >
-                      <Heading level={3} className="font-serif italic text-3xl">
+                      <Heading
+                        level={3}
+                        className="font-serif italic text-3xl text-center!"
+                      >
                         {artwork.artwork.title}
                       </Heading>
                     </Title>
@@ -145,9 +147,14 @@ export async function SelectedArtworksSection() {
                   <Title
                     textAbove={`Obra ${String(index + 1).padStart(2, "0")}`}
                     textBelow={artwork.artwork.description!}
-                    className={isReversed ? "text-right!" : ""}
                   >
-                    <Heading level={3} className="font-serif italic text-3xl">
+                    <Heading
+                      level={3}
+                      className={cn(
+                        "font-serif italic text-3xl",
+                        isReversed ? "md:text-right!" : "md:text-left!",
+                      )}
+                    >
                       {artwork.artwork.title}
                     </Heading>
                   </Title>
