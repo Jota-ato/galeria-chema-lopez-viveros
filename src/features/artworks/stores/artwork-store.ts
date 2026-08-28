@@ -6,6 +6,9 @@ interface ArtworkStore {
   imageUrl: string | null;
   setImageUrl: (url: string | null) => void;
 
+  deleteDialogOpen: boolean;
+  setDeleteDialogOpen: (open: boolean) => void;
+
   extraImagesUrl: string[] | null;
   setExtraImagesUrl: (urls: string[] | null) => void;
   addExtraImageUrl: (url: string) => void;
@@ -25,6 +28,9 @@ export const useArtworkStore = create<ArtworkStore>()(
       extraImagesUrl: null,
       basicInfo: null,
       confirmationDialogOpen: false,
+
+      deleteDialogOpen: false,
+      setDeleteDialogOpen: (open) => set({ deleteDialogOpen: open }),
 
       setImageUrl: (url) => set({ imageUrl: url }),
 

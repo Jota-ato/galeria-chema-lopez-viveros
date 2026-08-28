@@ -3,9 +3,10 @@ import { redirect } from "next/navigation";
 import { getCachedArtwork } from "@/shared/lib/cache";
 import { ArtworkNotFound } from "@/features/artworks/components/artwork-not-found";
 import { Heading } from "@/shared/components/typography/heading";
-import { Button } from "@/shared/components/ui/button";
-import { Save } from "lucide-react";
+
 import { ArtworkPanel } from "@/features/artworks/components/artwork-panel";
+import { DeleteArtworkbutton } from "@/features/artworks/components/delete-artwork-button";
+import { DeleteArtworkDialog } from "@/features/artworks/components/delete-artwork-dialog";
 
 export async function generateMetadata({
   params,
@@ -41,8 +42,10 @@ export default async function EditArtworkPage({
         <Heading className="text-left text-xl! font-medium">
           Editar obra: {artwork.title}
         </Heading>
+        <DeleteArtworkbutton slug={artwork.slug} />
       </header>
       <ArtworkPanel key={artwork.id} artwork={artwork} />
+      <DeleteArtworkDialog artwork={artwork} />
     </>
   );
 }

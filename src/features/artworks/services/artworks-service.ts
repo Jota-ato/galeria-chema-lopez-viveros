@@ -88,6 +88,16 @@ class ArworksService {
     }
     return await this.artworksRepository.search(query);
   }
+
+  async deleteArtwork(slug: string) {
+    const artwork = await this.artworksRepository.getBySlug(slug);
+
+    if (!artwork) {
+      throw new AppError("No se encontró la obra");
+    }
+
+    await this.artworksRepository.delete(artwork.slug);
+  }
 }
 
 export const artworksService = new ArworksService(

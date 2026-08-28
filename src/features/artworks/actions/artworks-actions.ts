@@ -50,3 +50,8 @@ export const updateArtworkAction = adminAction(
     };
   },
 );
+
+export const deleteArtworkAction = adminAction(async (slug: string) => {
+  await artworksService.deleteArtwork(slug);
+  return "Obra eliminada con éxito";
+});
