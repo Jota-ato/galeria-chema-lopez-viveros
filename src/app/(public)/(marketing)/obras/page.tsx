@@ -6,6 +6,8 @@ import { Container } from "@/shared/components/layout/container";
 import { Title } from "@/shared/components/public/title";
 import { Heading } from "@/shared/components/typography/heading";
 
+export const dynamic = "force-dynamic";
+
 export default async function ObrasPage() {
   const artworks = await artworksService.getLastArtworks(5, 1);
 
