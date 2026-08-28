@@ -15,11 +15,8 @@ interface ArtworkBentoAlbumProps {
   targetRowHeight?: number;
   spacing?: number;
   admin?: boolean;
-  /** Componente que envuelve cada card. Debe cumplir ArtworkWrapperProps. */
   artworkWrapper?: ComponentType<ArtworkWrapperProps>;
-  /** Si se define, el wrapper recibe `selected` por artwork. */
   isSelected?: (artwork: Artwork) => boolean;
-  /** Si se define, el wrapper recibe `onToggle` por artwork. */
   onToggleSelect?: (artwork: Artwork) => void;
 }
 

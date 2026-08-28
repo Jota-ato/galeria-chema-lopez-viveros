@@ -9,7 +9,7 @@ import { Heading } from "@/shared/components/typography/heading";
 export const dynamic = "force-dynamic";
 
 export default async function ObrasPage() {
-  const artworks = await artworksService.getLastArtworks(5, 1);
+  const artworks = await artworksService.getLastArtworks(10, 1);
 
   return (
     <div className="pt-12">
